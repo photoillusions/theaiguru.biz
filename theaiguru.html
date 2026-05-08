@@ -1,0 +1,3702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TheAIGuru.biz â€” Futuristic AI Business Automation | Mt. Holly, NJ</title>
+<meta name="description" content="TheAIGuru.biz â€” We build custom AI systems for small businesses. Voice agents, automation pipelines, AI imaging, and more. Mt. Holly, NJ.">
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<!-- Three.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<!-- GSAP + ScrollTrigger -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+<style>
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   ROOT & RESET â€” FUTURISTIC DARK THEME
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+:root {
+  --bg-deep: #ffffff;
+  --bg-dark: #f7f3f0;
+  --bg-card: rgba(255, 255, 255, 0.92);
+  --bg-glass: rgba(123, 30, 46, 0.04);
+  --cyan: #8b1530;
+  --cyan-dim: rgba(139,21,48,0.10);
+  --cyan-glow: 0 8px 32px rgba(139,21,48,0.18);
+  --gold: #b8902a;
+  --gold-dim: rgba(184,144,42,0.14);
+  --gold-glow: 0 8px 32px rgba(184,144,42,0.22);
+  --purple: #5a0d20;
+  --purple-dim: rgba(90,13,32,0.10);
+  --green: #b8902a;
+  --red: #8b1530;
+  --text: #0d0608;
+  --text-mid: #1a0d12;
+  --text-muted: #6b5359;
+  --border: rgba(139,21,48,0.16);
+  --border-glow: rgba(184,144,42,0.45);
+  --font-heading: 'Orbitron', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg-deep);
+  color: var(--text-mid);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  cursor: default;
+}
+
+::selection { background: rgba(192,28,74,0.3); color: #fff; }
+
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   PRELOADER
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+#preloader {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: var(--bg-deep);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 2rem;
+  transition: opacity 0.6s, visibility 0.6s;
+}
+#preloader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+.loader-ring {
+  width: 60px; height: 60px;
+  border: 3px solid var(--border);
+  border-top-color: var(--cyan);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+.loader-text {
+  font-family: var(--font-heading);
+  font-size: 0.75rem;
+  letter-spacing: 0.3em;
+  color: var(--cyan);
+  text-transform: uppercase;
+  animation: loaderPulse 1.5s ease-in-out infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes loaderPulse { 0%,100%{ opacity:0.4; } 50%{ opacity:1; } }
+
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   CUSTOM CURSOR
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+.cursor-dot {
+  width: 8px; height: 8px;
+  background: var(--cyan);
+  border-radius: 50%;
+  position: fixed;
+  pointer-events: none;
+  z-index: 10000;
+  transition: transform 0.1s;
+  mix-blend-mode: difference;
+}
+.cursor-ring {
+  width: 36px; height: 36px;
+  border: 1.5px solid rgba(192,28,74,0.4);
+  border-radius: 50%;
+  position: fixed;
+  pointer-events: none;
+  z-index: 10000;
+  transition: transform 0.15s ease-out, width 0.3s, height 0.3s, border-color 0.3s;
+  transform: translate(-50%, -50%);
+}
+.cursor-ring.hover {
+  width: 56px; height: 56px;
+  border-color: var(--gold);
+}
+@media (max-width: 768px) {
+  .cursor-dot, .cursor-ring { display: none; }
+}
+
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   NAVIGATION
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+nav {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+  background: rgba(255,255,255,0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 2rem;
+  transition: background 0.3s;
+}
+nav.scrolled { background: rgba(255,255,255,0.96); box-shadow: 0 4px 24px rgba(139,21,48,0.06); }
+
+.nav-inner {
+  max-width: 1300px;
+  margin: 0 auto;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+}
+.logo-mark {
+  width: 40px; height: 40px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--cyan), var(--purple));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  box-shadow: 0 0 20px rgba(192,28,74,0.3);
+  animation: logoPulse 3s ease-in-out infinite;
+}
+@keyframes logoPulse {
+  0%,100%{ box-shadow: 0 0 20px rgba(192,28,74,0.3); }
+  50%{ box-shadow: 0 0 35px rgba(192,28,74,0.5); }
+}
+.logo-mark::after {
+  content: '';
+  position: absolute;
+  bottom: -1px; right: -1px;
+  width: 10px; height: 4px;
+  background: var(--gold);
+  border-radius: 0 0 6px 0;
+}
+.logo-text {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 1.05rem;
+  letter-spacing: 0.05em;
+  color: var(--text);
+}
+.logo-text span { color: var(--cyan); }
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 2.5rem;
+  list-style: none;
+}
+.nav-links a {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  text-decoration: none;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: color 0.3s, text-shadow 0.3s;
+  position: relative;
+}
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--cyan);
+  box-shadow: 0 0 8px var(--cyan);
+  transition: width 0.3s;
+}
+.nav-links a:hover { color: var(--cyan); text-shadow: 0 0 20px rgba(192,28,74,0.3); }
+.nav-links a:hover::after { width: 100%; }
+
+.nav-cta { display: flex; align-items: center; gap: 12px; }
+.btn-nav {
+  font-family: var(--font-heading);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--bg-deep);
+  background: linear-gradient(135deg, var(--cyan), #7b1e2e);
+  border: none;
+  cursor: pointer;
+  padding: 10px 22px;
+  border-radius: 8px;
+  transition: all 0.3s;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: var(--cyan-glow);
+}
+.btn-nav:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 40px rgba(192,28,74,0.5);
+}
+
+/* Mobile menu toggle */
+.mobile-toggle {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 4px;
+}
+.mobile-toggle span {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: var(--text);
+  border-radius: 2px;
+  transition: all 0.3s;
+}
+
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   HERO SECTION
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 8rem 2rem 5rem;
+  overflow: hidden;
+}
+
+#hero-3d {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+/* Gradient overlays */
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 200px;
+  background: linear-gradient(to bottom, var(--bg-deep), transparent);
+  z-index: 1;
+  pointer-events: none;
+}
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 300px;
+  background: linear-gradient(to top, var(--bg-deep), transparent);
+  z-index: 1;
+  pointer-events: none;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--cyan);
+  background: var(--cyan-dim);
+  border: 1px solid rgba(192,28,74,0.2);
+  padding: 8px 18px;
+  border-radius: 100px;
+  margin-bottom: 2.5rem;
+  backdrop-filter: blur(10px);
+}
+.eyebrow-dot {
+  width: 8px; height: 8px;
+  background: var(--gold);
+  border-radius: 50%;
+  animation: dotPulse 2s ease-in-out infinite;
+  box-shadow: 0 0 10px rgba(245,197,66,0.5);
+}
+@keyframes dotPulse {
+  0%,100%{ transform: scale(1); box-shadow: 0 0 10px rgba(245,197,66,0.5); }
+  50%{ transform: scale(0.6); box-shadow: 0 0 5px rgba(245,197,66,0.3); }
+}
+
+.hero-headline {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: clamp(2.5rem, 6vw, 5rem);
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  color: var(--text);
+  margin-bottom: 1.5rem;
+}
+.hero-headline .accent-cyan {
+  background: linear-gradient(135deg, var(--cyan), #7b1e2e);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.hero-headline .accent-gold {
+  background: linear-gradient(135deg, var(--gold), #f59e0b);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.hero-headline .glow-text {
+  text-shadow: 0 0 60px rgba(192,28,74,0.3);
+}
+
+.hero-sub {
+  font-size: 1.15rem;
+  font-weight: 400;
+  color: var(--text-muted);
+  max-width: 600px;
+  margin: 0 auto 2.5rem;
+  line-height: 1.8;
+}
+
+.hero-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 3rem;
+}
+
+.btn-hero-primary {
+  font-family: var(--font-heading);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--bg-deep);
+  background: linear-gradient(135deg, var(--cyan), #7b1e2e);
+  border: none;
+  cursor: pointer;
+  padding: 16px 36px;
+  border-radius: 12px;
+  transition: all 0.3s;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: var(--cyan-glow);
+  position: relative;
+  overflow: hidden;
+}
+.btn-hero-primary::before {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%;
+  width: 100%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: left 0.5s;
+}
+.btn-hero-primary:hover::before { left: 100%; }
+.btn-hero-primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 0 50px rgba(192,28,74,0.5);
+}
+
+.btn-hero-outline {
+  font-family: var(--font-heading);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text);
+  background: rgba(255,255,255,0.03);
+  border: 1.5px solid rgba(255,255,255,0.12);
+  cursor: pointer;
+  padding: 15px 36px;
+  border-radius: 12px;
+  transition: all 0.3s;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  backdrop-filter: blur(10px);
+}
+.btn-hero-outline:hover {
+  border-color: var(--cyan);
+  color: var(--cyan);
+  box-shadow: 0 0 30px rgba(192,28,74,0.15);
+  transform: translateY(-2px);
+}
+
+/* Trust badges */
+.hero-trust {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+.trust-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+}
+.trust-badge .tb-icon {
+  width: 18px; height: 18px;
+  color: var(--gold);
+  filter: drop-shadow(0 0 4px rgba(245,197,66,0.4));
+}
+
+/* Scroll indicator */
+.scroll-indicator {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  animation: scrollBounce 2s ease-in-out infinite;
+}
+.scroll-indicator span {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.scroll-line {
+  width: 1px;
+  height: 40px;
+  background: linear-gradient(to bottom, var(--cyan), transparent);
+}
+@keyframes scrollBounce {
+  0%,100%{ transform: translateX(-50%) translateY(0); }
+  50%{ transform: translateX(-50%) translateY(8px); }
+}
+
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   STATS BAR
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+.stats-bar {
+  position: relative;
+  background: rgba(10,13,26,0.9);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 3rem 2rem;
+  overflow: hidden;
+}
+.stats-bar::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg,
+    transparent,
+    rgba(192,28,74,0.03) 20%,
+    rgba(123,30,46,0.03) 50%,
+    rgba(245,197,66,0.03) 80%,
+    transparent
+  );
+  pointer-events: none;
+}
+.stats-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  gap: 2rem;
+  flex-wrap: wrap;
+  position: relative;
+}
+.stat-item { text-align: center; }
+.stat-num {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 2.5rem;
+  color: #ffffff;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+.stat-num .counter-suffix { color: var(--gold); }
+.stat-label {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: rgba(255,255,255,0.75);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin-top: 6px;
+}
+.stat-div {
+  width: 1px;
+  height: 50px;
+  background: linear-gradient(to bottom, transparent, var(--border), transparent);
+}
+
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   SECTION COMMONS
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+section { padding: 7rem 2rem; position: relative; }
+.section-inner { max-width: 1200px; margin: 0 auto; }
+
+.section-tag {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--cyan);
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.section-tag::before {
+  content: '';
+  width: 20px;
+  height: 1px;
+  background: var(--cyan);
+  box-shadow: 0 0 8px var(--cyan);
+}
+
+.section-title {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: clamp(1.6rem, 3.5vw, 2.6rem);
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+  color: var(--text);
+  margin-bottom: 1rem;
+}
+
+.section-sub {
+  font-size: 1rem;
+  color: var(--text-muted);
+  max-width: 540px;
+  line-height: 1.7;
+}
+
+.section-header {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  align-items: end;
+  margin-bottom: 4rem;
+}
+.section-header-center {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+.section-header-center .section-tag { justify-content: center; }
+.section-header-center .section-sub { margin: 0 auto; }
+
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   SERVICES â€” GLASSMORPHIC 3D BENTO
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+.services {
+  background: var(--bg-deep);
+  position: relative;
+}
+.services::before {
+  content: '';
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 800px; height: 800px;
+  background: radial-gradient(circle, rgba(192,28,74,0.08), rgba(245,197,66,0.03) 50%, transparent 70%);
+  pointer-events: none;
+}
+
+.bento {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 1.25rem;
+}
+
+/* Glass card base */
+.b-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  padding: 2rem;
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  position: relative;
+  overflow: hidden;
+  transform-style: preserve-3d;
+  perspective: 1000px;
+}
+.b-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--cyan), var(--purple), var(--gold));
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+.b-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    rgba(192,28,74,0.06), transparent 40%);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+.b-card:hover {
+  border-color: var(--border-glow);
+  box-shadow: 0 8px 40px rgba(192,28,74,0.15), 0 0 20px rgba(245,197,66,0.08);
+  transform: translateY(-4px);
+}
+.b-card:hover::before { opacity: 1; }
+.b-card:hover::after { opacity: 1; }
+
+.b-wide   { grid-column: span 8; }
+.b-narrow { grid-column: span 4; }
+.b-third  { grid-column: span 4; }
+.b-half   { grid-column: span 6; }
+.b-full   { grid-column: span 12; }
+
+.b-icon {
+  width: 48px; height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.25rem;
+  flex-shrink: 0;
+}
+.b-icon.cyan   { background: var(--cyan-dim); box-shadow: 0 0 20px rgba(192,28,74,0.1); }
+.b-icon.gold   { background: var(--gold-dim); box-shadow: 0 0 20px rgba(245,197,66,0.1); }
+.b-icon.purple { background: var(--purple-dim); box-shadow: 0 0 20px rgba(123,30,46,0.1); }
+.b-icon.green  { background: rgba(16,185,129,0.12); box-shadow: 0 0 20px rgba(16,185,129,0.1); }
+
+.b-icon svg { width: 22px; height: 22px; }
+.b-icon.cyan svg   { color: var(--cyan); }
+.b-icon.gold svg   { color: var(--gold); }
+.b-icon.purple svg { color: var(--purple); }
+.b-icon.green svg  { color: var(--green); }
+
+.b-label {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 0.5rem;
+}
+.b-title {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 1.1rem;
+  letter-spacing: 0;
+  color: var(--text);
+  margin-bottom: 0.75rem;
+  line-height: 1.3;
+}
+.b-body {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  line-height: 1.7;
+}
+
+/* Featured card */
+.b-card.featured {
+  background: linear-gradient(135deg, rgba(192,28,74,0.1), rgba(123,30,46,0.08), rgba(245,197,66,0.05));
+  border-color: rgba(192,28,74,0.25);
+}
+.b-card.featured:hover {
+  border-color: rgba(192,28,74,0.3);
+  box-shadow: 0 8px 50px rgba(192,28,74,0.12);
+}
+
+.featured-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--gold-dim);
+  border: 1px solid rgba(245,197,66,0.3);
+  color: var(--gold);
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 5px 14px;
+  border-radius: 100px;
+  margin-top: 1.25rem;
+  width: fit-content;
+}
+
+.b-wide-inner {
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+}
+.b-wide-inner .b-icon { margin-bottom: 0; }
+
+.tech-pills { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 1rem; }
+.tech-pill {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--cyan);
+  background: var(--cyan-dim);
+  border: 1px solid rgba(192,28,74,0.15);
+  padding: 3px 11px;
+  border-radius: 100px;
+  letter-spacing: 0.05em;
+}
+.tech-pill.gold {
+  color: var(--gold);
+  background: var(--gold-dim);
+  border-color: rgba(245,197,66,0.2);
+}
+.tech-pill.purple {
+  color: var(--purple);
+  background: var(--purple-dim);
+  border-color: rgba(123,30,46,0.2);
+}
+.tech-pill.green {
+  color: var(--green);
+  background: rgba(16,185,129,0.1);
+  border-color: rgba(16,185,129,0.2);
+}
+
+/* ── Stock Image Styles ── */
+.hero-split {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 2.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+}
+.hero-split .hero-content { flex: 1; width: 100%; }
+.hero-split .hero-actions { justify-content: center; }
+.hero-split .hero-trust { justify-content: center; }
+.hero-split .hero-eyebrow { justify-content: center; }
+.hero-image {
+  flex: none;
+  width: 100%;
+  max-width: 900px;
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid rgba(192,28,74,0.2);
+  box-shadow: 0 8px 60px rgba(192,28,74,0.15), 0 0 30px rgba(245,197,66,0.06);
+}
+.hero-image img {
+  width: 100%;
+  height: 360px;
+  object-fit: cover;
+  display: block;
+  filter: brightness(0.9) saturate(1.1);
+}
+.hero-image::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 50%, rgba(12,18,32,0.7));
+  pointer-events: none;
+}
+
+.b-card-img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+  border: 1px solid rgba(192,28,74,0.1);
+  filter: brightness(0.85) saturate(1.15);
+  transition: filter 0.4s, transform 0.4s;
+  overflow: hidden;
+}
+.b-card:hover .b-card-img {
+  filter: brightness(1) saturate(1.2);
+  transform: scale(1.02);
+}
+.b-card.featured .b-card-img {
+  height: 200px;
+  border-radius: 12px;
+}
+
+.step-img {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+  border: 1px solid rgba(192,28,74,0.1);
+  filter: brightness(0.8) saturate(1.1);
+  transition: filter 0.4s;
+}
+.step:hover .step-img {
+  filter: brightness(1) saturate(1.2);
+}
+
+.result-avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid rgba(192,28,74,0.3);
+  margin-bottom: 0;
+  filter: brightness(0.9) saturate(1.1);
+  flex-shrink: 0;
+}
+.result-meta {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1.25rem;
+}
+.result-meta-text { display: flex; flex-direction: column; }
+
+@media (max-width: 768px) {
+  .hero-split { gap: 1.5rem; }
+  .hero-image { max-width: 100%; }
+  .hero-image img { height: 220px; }
+  .b-card-img { height: 130px; }
+  .step-img { height: 100px; }
+}
+
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   VIDEO SHOWCASE
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+.video-section {
+  background: var(--bg-deep);
+  padding: 7rem 2rem;
+  position: relative;
+}
+.video-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  box-shadow: 0 20px 80px rgba(0,0,0,0.4), var(--cyan-glow);
+  aspect-ratio: 16/9;
+  background: var(--bg-dark);
+}
+.video-container::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: 20px;
+  padding: 1px;
+  background: linear-gradient(135deg, var(--cyan), transparent 50%, var(--purple));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: 1;
+}
+.video-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 1.5rem;
+  background: linear-gradient(135deg, rgba(192,28,74,0.03), rgba(123,30,46,0.03));
+  cursor: pointer;
+  transition: background 0.3s;
+}
+.video-placeholder:hover { background: linear-gradient(135deg, rgba(192,28,74,0.06), rgba(123,30,46,0.06)); }
+.play-btn {
+  width: 80px; height: 80px;
+  border-radius: 50%;
+  border: 2px solid var(--cyan);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--cyan-glow);
+  transition: all 0.3s;
+  animation: playPulse 2.5s ease-in-out infinite;
+}
+.play-btn:hover { transform: scale(1.1); box-shadow: 0 0 50px rgba(192,28,74,0.5); }
+@keyframes playPulse {
+  0%,100%{ box-shadow: 0 0 30px rgba(192,28,74,0.3); }
+  50%{ box-shadow: 0 0 50px rgba(192,28,74,0.5); }
+}
+.play-btn svg { width: 30px; height: 30px; color: var(--cyan); margin-left: 4px; }
+.video-label {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   PROCESS TIMELINE
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+.process { background: var(--bg-deep); }
+.process::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 1px;
+  height: 100%;
+  background: linear-gradient(to bottom, transparent, var(--border), transparent);
+  pointer-events: none;
+}
+
+.steps-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+}
+.step {
+  position: relative;
+  padding: 2.5rem 2rem;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  backdrop-filter: blur(12px);
+  transition: all 0.4s;
+  overflow: hidden;
+}
+.step::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(300px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    rgba(192,28,74,0.04), transparent 50%);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.step:hover::before { opacity: 1; }
+.step:hover {
+  border-color: var(--border-glow);
+  box-shadow: 0 4px 30px rgba(192,28,74,0.15), 0 0 15px rgba(245,197,66,0.06);
+  transform: translateY(-3px);
+}
+.step-num {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 3rem;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  background: linear-gradient(135deg, rgba(192,28,74,0.15), rgba(123,30,46,0.08));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 1rem;
+}
+.step-title {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--text);
+  margin-bottom: 0.6rem;
+  letter-spacing: 0.02em;
+}
+.step-body {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  line-height: 1.7;
+}
+
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   TECH STACK
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+.stack {
+  background: var(--bg-dark);
+  padding: 5rem 2rem;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  overflow: hidden;
+}
+.stack-label {
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 2.5rem;
+}
+.stack-logos {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+.stack-chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--text-mid);
+  font-weight: 400;
+  letter-spacing: 0.03em;
+  transition: all 0.3s;
+  backdrop-filter: blur(8px);
+}
+.stack-chip:hover {
+  border-color: var(--cyan);
+  box-shadow: 0 0 20px rgba(192,28,74,0.1);
+  transform: translateY(-2px);
+  color: var(--text);
+}
+.stack-chip .sc-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  box-shadow: 0 0 6px currentColor;
+}
+
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   RESULTS / SOCIAL PROOF
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+.results { background: var(--bg-deep); }
+.results-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+.result-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 2rem;
+  backdrop-filter: blur(12px);
+  transition: all 0.4s;
+}
+.result-card:hover {
+  border-color: var(--border-glow);
+  box-shadow: 0 4px 30px rgba(192,28,74,0.12), 0 0 15px rgba(245,197,66,0.06);
+  transform: translateY(-3px);
+}
+.results .section-title,
+.results .section-sub,
+.result-quote,
+.result-author,
+.result-role {
+  color: var(--text);
+}
+.results .section-sub { color: var(--text-muted); }
+.result-role { color: var(--text-muted); }
+.result-quote {
+  font-size: 0.95rem;
+  line-height: 1.7;
+  margin-bottom: 1.5rem;
+  font-style: italic;
+  position: relative;
+  padding-left: 1.25rem;
+  border-left: 2px solid var(--cyan);
+}
+.result-author {
+  font-family: var(--font-heading);
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+}
+.result-role {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   CTA SECTION
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+.cta-section {
+  background: var(--bg-deep);
+  padding: 8rem 2rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.cta-section::before {
+  content: '';
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 800px; height: 600px;
+  background: radial-gradient(ellipse, rgba(192,28,74,0.1) 0%, rgba(245,197,66,0.05) 30%, rgba(123,30,46,0.04) 50%, transparent 70%);
+  pointer-events: none;
+}
+.cta-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 680px;
+  margin: 0 auto;
+}
+.cta-tag {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+.cta-tag::before, .cta-tag::after {
+  content: '';
+  width: 30px;
+  height: 1px;
+  background: var(--gold);
+  box-shadow: 0 0 8px rgba(245,197,66,0.3);
+}
+.cta-title {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+  color: var(--text);
+  margin-bottom: 1.25rem;
+}
+.cta-sub {
+  font-size: 1rem;
+  color: var(--text-muted);
+  margin-bottom: 2.5rem;
+  line-height: 1.7;
+}
+.cta-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+.cta-location {
+  margin-top: 1.5rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--cyan);
+}
+.cta-location svg { color: var(--gold); }
+.btn-cta-primary {
+  font-family: var(--font-heading);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--bg-deep);
+  background: linear-gradient(135deg, var(--cyan), #7b1e2e);
+  border: none;
+  cursor: pointer;
+  padding: 15px 32px;
+  border-radius: 10px;
+  transition: all 0.3s;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: var(--cyan-glow);
+}
+.btn-cta-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 50px rgba(192,28,74,0.4);
+}
+.btn-cta-outline {
+  font-family: var(--font-heading);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text);
+  background: transparent;
+  border: 1.5px solid rgba(255,255,255,0.12);
+  cursor: pointer;
+  padding: 14px 32px;
+  border-radius: 10px;
+  transition: all 0.3s;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.btn-cta-outline:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+  box-shadow: 0 0 30px rgba(245,197,66,0.15);
+}
+
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   FOOTER
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+footer {
+  background: #0d0608;
+  color: #f7f3f0;
+  padding: 3rem 2rem;
+  border-top: 3px solid var(--gold);
+}
+.footer-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+.footer-brand {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--text);
+  letter-spacing: 0.05em;
+}
+.footer-brand span { color: var(--cyan); }
+.footer-copy {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+}
+.footer-links {
+  display: flex;
+  gap: 2rem;
+  list-style: none;
+}
+.footer-links a {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  text-decoration: none;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: color 0.3s;
+}
+.footer-links a:hover { color: var(--cyan); }
+
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   AI AGENT CHATBOT
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+.ai-agent-fab {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 5000;
+  width: 60px; height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--cyan), var(--purple));
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 30px rgba(192,28,74,0.4), 0 8px 30px rgba(0,0,0,0.3);
+  transition: all 0.3s;
+  animation: fabPulse 3s ease-in-out infinite;
+}
+.ai-agent-fab:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 50px rgba(192,28,74,0.5);
+}
+.ai-agent-fab svg { width: 26px; height: 26px; color: white; }
+@keyframes fabPulse {
+  0%,100%{ box-shadow: 0 0 30px rgba(192,28,74,0.4), 0 8px 30px rgba(0,0,0,0.3); }
+  50%{ box-shadow: 0 0 45px rgba(192,28,74,0.6), 0 8px 30px rgba(0,0,0,0.3); }
+}
+
+.ai-agent-fab::after {
+  content: '';
+  position: absolute;
+  top: -2px; right: -2px;
+  width: 14px; height: 14px;
+  background: var(--gold);
+  border-radius: 50%;
+  border: 2px solid var(--bg-deep);
+  animation: dotPulse 2s ease-in-out infinite;
+}
+
+.ai-chat-panel {
+  position: fixed;
+  bottom: 6.5rem;
+  right: 2rem;
+  z-index: 5001;
+  width: 380px;
+  max-height: 520px;
+  background: rgba(10,13,26,0.95);
+  backdrop-filter: blur(24px);
+  border: 1px solid rgba(192,28,74,0.2);
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 40px rgba(192,28,74,0.1);
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(20px) scale(0.95);
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  overflow: hidden;
+}
+.ai-chat-panel.open {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+}
+
+.chat-header {
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.chat-avatar {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--cyan), var(--purple));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 15px rgba(192,28,74,0.3);
+  flex-shrink: 0;
+}
+.chat-avatar svg { width: 18px; height: 18px; color: white; }
+.chat-header-info { flex: 1; }
+.chat-header-name {
+  font-family: var(--font-heading);
+  font-size: 0.75rem;
+  color: var(--text);
+  letter-spacing: 0.05em;
+}
+.chat-header-status {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  color: var(--green);
+  letter-spacing: 0.08em;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.chat-header-status::before {
+  content: '';
+  width: 6px; height: 6px;
+  background: var(--green);
+  border-radius: 50%;
+  animation: dotPulse 2s ease-in-out infinite;
+}
+.chat-close {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 4px;
+  transition: color 0.2s;
+}
+.chat-close:hover { color: var(--text); }
+.chat-close svg { width: 18px; height: 18px; }
+
+.chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  min-height: 260px;
+  max-height: 320px;
+}
+.chat-messages::-webkit-scrollbar { width: 4px; }
+.chat-messages::-webkit-scrollbar-track { background: transparent; }
+.chat-messages::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+.chat-msg {
+  max-width: 85%;
+  padding: 0.75rem 1rem;
+  border-radius: 14px;
+  font-size: 0.82rem;
+  line-height: 1.6;
+  animation: msgFadeIn 0.3s ease;
+}
+@keyframes msgFadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.chat-msg.bot {
+  align-self: flex-start;
+  background: rgba(192,28,74,0.08);
+  border: 1px solid rgba(192,28,74,0.12);
+  color: var(--text-mid);
+  border-bottom-left-radius: 4px;
+}
+.chat-msg.user {
+  align-self: flex-end;
+  background: linear-gradient(135deg, var(--cyan), #7b1e2e);
+  color: var(--bg-deep);
+  font-weight: 500;
+  border-bottom-right-radius: 4px;
+}
+
+.chat-typing {
+  align-self: flex-start;
+  display: flex;
+  gap: 4px;
+  padding: 0.75rem 1rem;
+  background: rgba(192,28,74,0.08);
+  border: 1px solid rgba(192,28,74,0.12);
+  border-radius: 14px;
+  border-bottom-left-radius: 4px;
+}
+.chat-typing span {
+  width: 6px; height: 6px;
+  background: var(--cyan);
+  border-radius: 50%;
+  animation: typingDot 1.4s ease-in-out infinite;
+}
+.chat-typing span:nth-child(2) { animation-delay: 0.2s; }
+.chat-typing span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes typingDot {
+  0%,100%{ opacity: 0.3; transform: translateY(0); }
+  50%{ opacity: 1; transform: translateY(-4px); }
+}
+
+.chat-input-area {
+  padding: 1rem 1.25rem;
+  border-top: 1px solid var(--border);
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.chat-input {
+  flex: 1;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 14px;
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  outline: none;
+  transition: border-color 0.3s;
+}
+.chat-input::placeholder { color: var(--text-muted); }
+.chat-input:focus { border-color: var(--cyan); }
+.chat-send {
+  width: 38px; height: 38px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--cyan), #7b1e2e);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+  flex-shrink: 0;
+}
+.chat-send:hover { box-shadow: 0 0 20px rgba(192,28,74,0.4); transform: scale(1.05); }
+.chat-send svg { width: 16px; height: 16px; color: var(--bg-deep); }
+
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   PARTICLE CANVAS OVERLAY
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+#particles-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.3;
+}
+
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   GSAP REVEAL ANIMATIONS
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+.gs-reveal {
+  opacity: 0;
+  transform: translateY(40px);
+}
+.gs-reveal-left {
+  opacity: 0;
+  transform: translateX(-60px);
+}
+.gs-reveal-right {
+  opacity: 0;
+  transform: translateX(60px);
+}
+.gs-reveal-scale {
+  opacity: 0;
+  transform: scale(0.9);
+}
+
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   RESPONSIVE
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+@media (max-width: 900px) {
+  .b-wide, .b-narrow, .b-third, .b-half, .b-full { grid-column: span 12; }
+  .section-header { grid-template-columns: 1fr; gap: 1rem; }
+  .b-wide-inner { flex-direction: column; }
+  .stat-div { display: none; }
+  .nav-links { display: none; }
+  .mobile-toggle { display: flex; }
+  .hero-headline { font-size: clamp(2rem, 8vw, 3.5rem); }
+  .ai-chat-panel { width: calc(100vw - 2rem); right: 1rem; bottom: 5.5rem; }
+  .ai-agent-fab { width: 52px; height: 52px; bottom: 1.5rem; right: 1.5rem; }
+}
+
+@media (max-width: 600px) {
+  section { padding: 4rem 1.25rem; }
+  .stats-inner { gap: 1.5rem; }
+  .stat-num { font-size: 2rem; }
+  .hero { padding: 7rem 1.25rem 4rem; }
+  .hero-trust { gap: 1rem; }
+}
+
+/* ═══════════════════════════════
+   SCANLINE OVERLAY
+═══════════════════════════════ */
+.scanline-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(192,28,74,0.008) 2px,
+    rgba(192,28,74,0.008) 4px
+  );
+  mix-blend-mode: screen;
+}
+.scanline-beam {
+  position: fixed;
+  left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(192,28,74,0.08), transparent);
+  z-index: 9998;
+  pointer-events: none;
+  animation: scanBeam 8s linear infinite;
+}
+@keyframes scanBeam {
+  0% { top: -2px; }
+  100% { top: 100vh; }
+}
+
+/* ═══════════════════════════════
+   GLITCH TEXT EFFECT
+═══════════════════════════════ */
+.glitch-wrap {
+  position: relative;
+  display: inline-block;
+}
+.glitch-wrap::before,
+.glitch-wrap::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+}
+.glitch-wrap::before {
+  color: var(--cyan);
+  z-index: -1;
+  animation: glitch1 5s infinite;
+}
+.glitch-wrap::after {
+  color: var(--purple);
+  z-index: -1;
+  animation: glitch2 5s infinite;
+}
+@keyframes glitch1 {
+  0%, 92%, 100% { opacity: 0; transform: none; }
+  93% { opacity: 0.7; transform: translate(-3px, -1px) skewX(-2deg); clip-path: inset(20% 0 40% 0); }
+  94% { opacity: 0.5; transform: translate(2px, 1px) skewX(1deg); clip-path: inset(60% 0 10% 0); }
+  95% { opacity: 0; }
+}
+@keyframes glitch2 {
+  0%, 93%, 100% { opacity: 0; transform: none; }
+  94% { opacity: 0.6; transform: translate(3px, 2px) skewX(3deg); clip-path: inset(40% 0 20% 0); }
+  95.5% { opacity: 0.4; transform: translate(-2px, -2px) skewX(-1deg); clip-path: inset(10% 0 60% 0); }
+  96% { opacity: 0; }
+}
+
+/* ═══════════════════════════════
+   ENERGY WAVE DIVIDERS
+═══════════════════════════════ */
+.energy-divider {
+  position: relative;
+  height: 60px;
+  overflow: hidden;
+  pointer-events: none;
+}
+.energy-divider .wave {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  border: 1px solid var(--cyan);
+  opacity: 0;
+  animation: energyWave 4s ease-out infinite;
+}
+.energy-divider .wave:nth-child(2) { animation-delay: 1s; border-color: var(--purple); }
+.energy-divider .wave:nth-child(3) { animation-delay: 2s; border-color: var(--gold); }
+.energy-divider .wave:nth-child(4) { animation-delay: 3s; }
+@keyframes energyWave {
+  0% { opacity: 0.6; width: 4px; height: 4px; margin-left: -2px; margin-top: -2px; }
+  100% { opacity: 0; width: 1200px; height: 120px; margin-left: -600px; margin-top: -60px; }
+}
+
+/* ═══════════════════════════════
+   HOLOGRAPHIC SHIMMER
+═══════════════════════════════ */
+.holo-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+.holo-shimmer::after {
+  content: '';
+  position: absolute;
+  top: 0; left: -150%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(
+    105deg,
+    transparent 30%,
+    rgba(192,28,74,0.05) 45%,
+    rgba(123,30,46,0.06) 50%,
+    rgba(245,197,66,0.04) 55%,
+    transparent 70%
+  );
+  animation: holoSweep 6s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+@keyframes holoSweep {
+  0% { left: -150%; }
+  50% { left: 200%; }
+  100% { left: 200%; }
+}
+
+/* ═══════════════════════════════
+   3D CARD TILT
+═══════════════════════════════ */
+.b-card.tilt-active,
+.step.tilt-active,
+.result-card.tilt-active {
+  transform-style: preserve-3d;
+  perspective: 1000px;
+}
+
+/* ═══════════════════════════════
+   LIGHT STREAKS
+═══════════════════════════════ */
+#streaks-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+/* ═══════════════════════════════
+   FLOATING ORBS
+═══════════════════════════════ */
+.floating-orb {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(40px);
+  opacity: 0.15;
+  animation: orbFloat 20s ease-in-out infinite;
+  z-index: 0;
+}
+.floating-orb.orb-cyan { background: var(--cyan); }
+.floating-orb.orb-purple { background: var(--purple); }
+.floating-orb.orb-gold { background: var(--gold); }
+@keyframes orbFloat {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  25% { transform: translate(30px, -40px) scale(1.1); }
+  50% { transform: translate(-20px, 20px) scale(0.9); }
+  75% { transform: translate(40px, 30px) scale(1.05); }
+}
+
+/* ═══════════════════════════════
+   DATA RAIN CANVAS
+═══════════════════════════════ */
+#datarain-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.12;
+}
+
+/* ═══════════════════════════════
+   SPEED LINES ON SCROLL
+═══════════════════════════════ */
+.speed-lines {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.speed-lines.active { opacity: 1; }
+.speed-line {
+  position: absolute;
+  width: 1px;
+  background: linear-gradient(to bottom, transparent, rgba(192,28,74,0.3), transparent);
+  animation: speedFall 0.4s linear;
+}
+@keyframes speedFall {
+  0% { transform: translateY(-100%); opacity: 0.6; }
+  100% { transform: translateY(100vh); opacity: 0; }
+}
+
+/* ═══════════════════════════════
+   PULSE RINGS ON HERO
+═══════════════════════════════ */
+.hero-pulse-ring {
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 200px; height: 200px;
+  border: 1px solid rgba(192,28,74,0.1);
+  border-radius: 50%;
+  transform: translate(-50%, -50%) scale(0.5);
+  animation: heroPulseRing 6s ease-out infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+.hero-pulse-ring:nth-child(2) { animation-delay: 2s; border-color: rgba(123,30,46,0.08); }
+.hero-pulse-ring:nth-child(3) { animation-delay: 4s; border-color: rgba(245,197,66,0.06); }
+@keyframes heroPulseRing {
+  0% { transform: translate(-50%, -50%) scale(0.5); opacity: 0.8; }
+  100% { transform: translate(-50%, -50%) scale(6); opacity: 0; }
+}
+
+/* ═══════════════════════════════
+   ELECTRIC BORDER ON HOVER
+═══════════════════════════════ */
+.b-card:hover .b-icon,
+.step:hover .step-num {
+  animation: electricPulse 0.6s ease-in-out;
+}
+@keyframes electricPulse {
+  0% { filter: brightness(1); }
+  25% { filter: brightness(1.8) drop-shadow(0 0 10px var(--cyan)); }
+  50% { filter: brightness(1); }
+  75% { filter: brightness(1.5) drop-shadow(0 0 8px var(--purple)); }
+  100% { filter: brightness(1); }
+}
+
+/* ═══════════════════════════════
+   PARALLAX DEPTH LAYERS
+═══════════════════════════════ */
+.parallax-slow { will-change: transform; }
+.parallax-medium { will-change: transform; }
+.parallax-fast { will-change: transform; }
+
+/* ═══════════════════════════════
+   SECTION GLOW BORDERS
+═══════════════════════════════ */
+.services::after,
+.process::after,
+.results::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 10%; right: 10%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--cyan), var(--purple), var(--gold), transparent);
+  opacity: 0.2;
+  animation: glowBorderShift 8s ease-in-out infinite alternate;
+}
+@keyframes glowBorderShift {
+  0% { background-position: 0% 50%; opacity: 0.1; }
+  50% { opacity: 0.3; }
+  100% { background-position: 100% 50%; opacity: 0.1; }
+}
+
+/* ═══════════════════════════════
+   NEON TEXT FLICKER
+═══════════════════════════════ */
+.logo-text span {
+  animation: neonFlicker 4s ease-in-out infinite;
+}
+@keyframes neonFlicker {
+  0%, 100% { text-shadow: 0 0 10px rgba(192,28,74,0.5), 0 0 20px rgba(192,28,74,0.3); }
+  5% { text-shadow: none; }
+  6% { text-shadow: 0 0 10px rgba(192,28,74,0.5), 0 0 20px rgba(192,28,74,0.3); }
+  10% { text-shadow: 0 0 15px rgba(192,28,74,0.7), 0 0 30px rgba(192,28,74,0.4); }
+  11% { text-shadow: none; }
+  12% { text-shadow: 0 0 10px rgba(192,28,74,0.5), 0 0 20px rgba(192,28,74,0.3); }
+}
+
+/* ═══════════════════════════════
+   MOUSE TRAIL GLOW
+═══════════════════════════════ */
+.mouse-trail {
+  position: fixed;
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--cyan);
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0;
+  filter: blur(2px);
+  transition: opacity 0.15s;
+}
+</style>
+</head>
+<body>
+
+<!-- PRELOADER -->
+<div id="preloader">
+  <div class="loader-ring"></div>
+  <div class="loader-text">Initializing AI Systems</div>
+</div>
+
+<!-- CUSTOM CURSOR -->
+<div class="cursor-dot"></div>
+<div class="cursor-ring"></div>
+
+<!-- FLOATING PARTICLES -->
+<canvas id="particles-canvas"></canvas>
+
+<!-- LIGHT STREAKS -->
+<canvas id="streaks-canvas"></canvas>
+
+<!-- DATA RAIN -->
+<canvas id="datarain-canvas"></canvas>
+
+<!-- SCANLINE OVERLAY -->
+<div class="scanline-overlay"></div>
+<div class="scanline-beam"></div>
+
+<!-- SPEED LINES ON SCROLL -->
+<div class="speed-lines" id="speed-lines"></div>
+
+<!-- MOUSE TRAIL -->
+<div class="mouse-trail" id="mouse-trail-0"></div>
+<div class="mouse-trail" id="mouse-trail-1"></div>
+<div class="mouse-trail" id="mouse-trail-2"></div>
+<div class="mouse-trail" id="mouse-trail-3"></div>
+<div class="mouse-trail" id="mouse-trail-4"></div>
+
+<!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+     NAVIGATION
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+<nav>
+  <div class="nav-inner">
+    <a href="https://theaiguru.biz" class="nav-logo">
+      <div class="logo-mark">
+        <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+          <circle cx="11" cy="11" r="2.5" fill="white"/>
+          <line x1="11" y1="11" x2="4" y2="4" stroke="white" stroke-width="1.5"/>
+          <line x1="11" y1="11" x2="18" y2="4" stroke="white" stroke-width="1.5"/>
+          <line x1="11" y1="11" x2="18" y2="18" stroke="white" stroke-width="1.5"/>
+          <line x1="11" y1="11" x2="4" y2="18" stroke="white" stroke-width="1.5"/>
+          <line x1="11" y1="11" x2="11" y2="2" stroke="white" stroke-width="1.5"/>
+          <line x1="11" y1="11" x2="11" y2="20" stroke="white" stroke-width="1.5"/>
+          <circle cx="4" cy="4" r="1.5" fill="white" opacity="0.7"/>
+          <circle cx="18" cy="4" r="1.5" fill="white" opacity="0.7"/>
+          <circle cx="18" cy="18" r="1.5" fill="white" opacity="0.7"/>
+          <circle cx="4" cy="18" r="1.5" fill="white" opacity="0.7"/>
+          <circle cx="11" cy="2" r="1.5" fill="white" opacity="0.7"/>
+          <circle cx="11" cy="20" r="1.5" fill="white" opacity="0.7"/>
+        </svg>
+      </div>
+      <span class="logo-text">THEAI<span>GURU</span></span>
+    </a>
+
+    <ul class="nav-links">
+      <li><a href="#services">Services</a></li>
+      <li><a href="#demo">Demo</a></li>
+      <li><a href="#process">Process</a></li>
+      <li><a href="#stack">Tech</a></li>
+      <li><a href="#results">Results</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+
+    <div class="nav-cta">
+      <a href="#contact" class="btn-nav">
+        AI Audit
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M8 4l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <button class="mobile-toggle" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+     HERO â€” 3D BACKGROUND
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+<section class="hero">
+  <div id="hero-3d"></div>
+  <div class="hero-pulse-ring"></div>
+  <div class="hero-pulse-ring"></div>
+  <div class="hero-pulse-ring"></div>
+
+  <div class="hero-split">
+  <div class="hero-content gs-reveal">
+    <div class="hero-eyebrow">
+      <span class="eyebrow-dot"></span>
+      AI Business Automation &middot; Mt. Holly, NJ
+    </div>
+
+    <h1 class="hero-headline">
+      We Build the<br>
+      <span class="glitch-wrap accent-cyan glow-text" data-text="AI Brain">AI Brain</span> Behind<br>
+      Your <span class="glitch-wrap accent-gold" data-text="Business">Business</span>
+    </h1>
+
+    <p class="hero-sub">
+      From 24/7 AI voice assistants to full automation pipelines &mdash; we engineer intelligent systems that transform small businesses into unstoppable machines. No fluff. Just code that works.
+    </p>
+
+    <div class="hero-actions">
+      <a href="#contact" class="btn-hero-primary">
+        Book a Consult
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <a href="#services" class="btn-hero-outline">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Explore Services
+      </a>
+    </div>
+
+    <div class="hero-trust">
+      <div class="trust-badge">
+        <svg class="tb-icon" viewBox="0 0 16 16" fill="none"><path d="M8 1l1.8 3.6L14 5.3l-3 2.9.7 4.1L8 10.4l-3.7 1.9.7-4.1L2 5.3l4.2-.7L8 1z" fill="currentColor"/></svg>
+        55+ AI Systems Built
+      </div>
+      <div class="trust-badge">
+        <svg class="tb-icon" viewBox="0 0 16 16" fill="none"><path d="M8 1l1.8 3.6L14 5.3l-3 2.9.7 4.1L8 10.4l-3.7 1.9.7-4.1L2 5.3l4.2-.7L8 1z" fill="currentColor"/></svg>
+        Live Production Systems
+      </div>
+      <div class="trust-badge">
+        <svg class="tb-icon" viewBox="0 0 16 16" fill="none"><path d="M8 1l1.8 3.6L14 5.3l-3 2.9.7 4.1L8 10.4l-3.7 1.9.7-4.1L2 5.3l4.2-.7L8 1z" fill="currentColor"/></svg>
+        100% Custom-Built
+      </div>
+    </div>
+  </div>
+
+    </div>
+  <div class="hero-image gs-reveal">
+    <img src="images/hero/hero-ai-tech.webp" alt="AI technology visualization" loading="eager" decoding="async">
+  </div>
+
+<div class="scroll-indicator">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+     STATS BAR
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+<div class="stats-bar">
+  <div class="stats-inner">
+    <div class="stat-item gs-reveal">
+      <div class="stat-num"><span class="counter" data-target="55">0</span><span class="counter-suffix">+</span></div>
+      <div class="stat-label">AI Systems Built</div>
+    </div>
+    <div class="stat-div"></div>
+    <div class="stat-item gs-reveal">
+      <div class="stat-num"><span class="counter" data-target="20">0</span><span class="counter-suffix">+</span></div>
+      <div class="stat-label">Technologies Mastered</div>
+    </div>
+    <div class="stat-div"></div>
+    <div class="stat-item gs-reveal">
+      <div class="stat-num"><span class="counter" data-target="24">0</span><span class="counter-suffix">/7</span></div>
+      <div class="stat-label">AI Voice Agents Live</div>
+    </div>
+    <div class="stat-div"></div>
+    <div class="stat-item gs-reveal">
+      <div class="stat-num"><span class="counter" data-target="100">0</span><span class="counter-suffix">%</span></div>
+      <div class="stat-label">Custom Builds</div>
+    </div>
+  </div>
+</div>
+
+<!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+     SERVICES
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+<!-- ENERGY DIVIDER -->
+<div class="energy-divider"><div class="wave"></div><div class="wave"></div><div class="wave"></div><div class="wave"></div></div>
+
+<section class="services holo-shimmer" id="services">
+  <div class="floating-orb orb-cyan" style="width:300px;height:300px;top:10%;left:-5%;animation-delay:-3s;"></div>
+  <div class="floating-orb orb-purple" style="width:200px;height:200px;top:60%;right:-3%;animation-delay:-8s;"></div>
+  <div class="section-inner">
+    <div class="section-header gs-reveal">
+      <div>
+        <span class="section-tag">what we build</span>
+        <h2 class="section-title">AI Systems for the<br>Real World</h2>
+      </div>
+      <p class="section-sub">
+        Every system is engineered from scratch for your business &mdash; no templates, no subscriptions, no middlemen. Just battle-tested technology.
+      </p>
+    </div>
+
+    <div class="bento">
+
+      <!-- FEATURED: AI Voice Agents -->
+      <div class="b-card featured b-wide gs-reveal">
+        <img class="b-card-img" src="images/services/voice-assistant.webp" alt="AI voice assistant technology" loading="lazy" decoding="async">
+        <div class="b-wide-inner">
+          <div class="b-icon cyan">
+            <svg viewBox="0 0 22 22" fill="none" color="currentColor">
+              <rect x="5" y="2" width="12" height="18" rx="2.5" stroke="currentColor" stroke-width="1.5"/>
+              <circle cx="11" cy="16" r="1.2" fill="currentColor"/>
+              <line x1="8" y1="5.5" x2="14" y2="5.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              <path d="M9 10v2a2 2 0 004 0v-2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div>
+            <div class="b-label">Flagship Service</div>
+            <div class="b-title">AI Voice Assistants &amp; Phone Agents</div>
+            <div class="b-body">Deploy a 24/7 AI receptionist that books appointments, answers questions, sends SMS confirmations, and integrates with your calendar &mdash; all in your brand's voice. Currently live for real clients.</div>
+            <div class="tech-pills" style="margin-top: 1rem;">
+              <span class="tech-pill">VAPI</span>
+              <span class="tech-pill">Python / Flask</span>
+              <span class="tech-pill">Google Calendar</span>
+              <span class="tech-pill">SMS / ClickSend</span>
+            </div>
+            <div class="featured-badge">&starf; &nbsp;Live in Production</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- AI Image Pipelines -->
+      <div class="b-card b-narrow gs-reveal">
+        <div class="b-icon purple">
+          <svg viewBox="0 0 22 22" fill="none" color="currentColor">
+            <rect x="2" y="4" width="18" height="14" rx="2.5" stroke="currentColor" stroke-width="1.5"/>
+            <circle cx="7.5" cy="10" r="1.8" stroke="currentColor" stroke-width="1.2"/>
+            <path d="M2 16l4.5-3.5 3.5 2.8 3-4 7 4.7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <img class="b-card-img" src="images/services/image-generation.webp" alt="AI image generation" loading="lazy" decoding="async">
+        <div class="b-label">AI Imaging</div>
+        <div class="b-title">AI Portrait &amp; Image Pipelines</div>
+        <div class="b-body">Batch AI image generation &amp; enhancement systems for events, studios, and e-commerce at scale.</div>
+        <div class="tech-pills">
+          <span class="tech-pill purple">Grok API</span>
+          <span class="tech-pill purple">ComfyUI</span>
+          <span class="tech-pill purple">FLUX</span>
+        </div>
+      </div>
+
+      <!-- Custom Web Apps -->
+      <div class="b-card b-third gs-reveal">
+        <div class="b-icon cyan">
+          <svg viewBox="0 0 22 22" fill="none" color="currentColor">
+            <rect x="2" y="3" width="18" height="15" rx="2.5" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M7.5 10l-2.5 2.5 2.5 2.5M14.5 10l2.5 2.5-2.5 2.5M12 8l-2 7" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <img class="b-card-img" src="images/services/web-app-development.webp" alt="Web application development" loading="lazy" decoding="async">
+        <div class="b-label">Web Apps</div>
+        <div class="b-title">Custom AI Web Applications</div>
+        <div class="b-body">React/TypeScript frontends with integrated AI chatbots, booking portals, and customer dashboards.</div>
+        <div class="tech-pills">
+          <span class="tech-pill">React</span>
+          <span class="tech-pill">TypeScript</span>
+          <span class="tech-pill">Netlify</span>
+        </div>
+      </div>
+
+      <!-- Automation -->
+      <div class="b-card b-third gs-reveal">
+        <div class="b-icon gold">
+          <svg viewBox="0 0 22 22" fill="none" color="currentColor">
+            <path d="M11 2v5M11 15v5M2 11h5M15 11h5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            <circle cx="11" cy="11" r="3.5" stroke="currentColor" stroke-width="1.5"/>
+            <circle cx="11" cy="11" r="1.2" fill="currentColor"/>
+          </svg>
+        </div>
+        <img class="b-card-img" src="images/services/business-automation.webp" alt="Business automation technology" loading="lazy" decoding="async">
+        <div class="b-label">Automation</div>
+        <div class="b-title">Business Process Automation</div>
+        <div class="b-body">PowerShell, Python, and API pipelines that eliminate manual tasks &mdash; batch processing, reporting, and data flows.</div>
+        <div class="tech-pills">
+          <span class="tech-pill gold">PowerShell</span>
+          <span class="tech-pill gold">Python</span>
+        </div>
+      </div>
+
+      <!-- CRM & Operations -->
+      <div class="b-card b-third gs-reveal">
+        <div class="b-icon green">
+          <svg viewBox="0 0 22 22" fill="none" color="currentColor">
+            <rect x="3" y="5" width="16" height="12" rx="2" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M3 9h16M7.5 5V3M14.5 5V3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <img class="b-card-img" src="images/services/ai-crm-dashboard.webp" alt="AI CRM dashboard" loading="lazy" decoding="async">
+        <div class="b-label">Operations</div>
+        <div class="b-title">AI CRM &amp; Desktop Tools</div>
+        <div class="b-body">Custom desktop CRM applications with Gemini AI, Google Calendar sync, SQLite, and unified client management.</div>
+        <div class="tech-pills">
+          <span class="tech-pill green">CustomTkinter</span>
+          <span class="tech-pill green">Gemini</span>
+        </div>
+      </div>
+
+      <!-- AI Consulting -->
+      <div class="b-card b-half gs-reveal">
+        <div style="display: flex; align-items: flex-start; gap: 1.25rem;">
+          <div class="b-icon cyan" style="flex-shrink: 0;">
+            <svg viewBox="0 0 22 22" fill="none" color="currentColor">
+              <path d="M11 2C6 2 2 5.6 2 10c0 2.3 1 4.3 2.7 5.7L4 20l3.5-1.6c1 .4 2.3.6 3.5.6 5 0 9-3.6 9-8s-4-8-9-8z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+              <path d="M7.5 10h7M7.5 13h5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div>
+            <div class="b-label">Strategy</div>
+            <div class="b-title">AI Consulting &amp; Roadmapping</div>
+            <div class="b-body">We audit your current business operations and identify where AI can cut costs, speed up workflows, and generate new revenue. Then we build it.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Marketing AI -->
+      <div class="b-card b-half gs-reveal">
+        <div style="display: flex; align-items: flex-start; gap: 1.25rem;">
+          <div class="b-icon gold" style="flex-shrink: 0;">
+            <svg viewBox="0 0 22 22" fill="none" color="currentColor">
+              <path d="M3 16l5-7 3.5 4.5 2.5-3 5 5.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="18" cy="5" r="2.5" stroke="currentColor" stroke-width="1.3"/>
+              <path d="M16 7l-5 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div>
+            <div class="b-label">Marketing</div>
+            <div class="b-title">AI Marketing &amp; Content Systems</div>
+            <div class="b-body">AI-powered marketing packages including social content generation, chatbots, proposal systems, and branded digital assets for client-facing businesses.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+     VIDEO DEMO
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+<!-- ENERGY DIVIDER -->
+<div class="energy-divider"><div class="wave"></div><div class="wave"></div><div class="wave"></div><div class="wave"></div></div>
+
+<section class="video-section" id="demo">
+  <div class="section-header-center gs-reveal" style="max-width: 1200px; margin: 0 auto 3rem;">
+    <span class="section-tag" style="justify-content: center;">live demo</span>
+    <h2 class="section-title">Charter School Software</h2>
+    <p class="section-sub">A full custom-built management system designed and shipped for a real charter school &mdash; enrollment, scheduling, communications, and AI-assisted operations, all in one app.</p>
+  </div>
+  <div class="video-container gs-reveal-scale">
+    <div style="padding:56.25% 0 0 0;position:relative;width:100%;height:100%;">
+      <iframe src="https://player.vimeo.com/video/1187325955?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479"
+              frameborder="0"
+              allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
+              referrerpolicy="strict-origin-when-cross-origin"
+              style="position:absolute;top:0;left:0;width:100%;height:100%;"
+              title="CCCS-SMS-LiveDemo"></iframe>
+    </div>
+  </div>
+</section>
+<script src="https://player.vimeo.com/api/player.js"></script>
+
+<!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+     PROCESS
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+<!-- ENERGY DIVIDER -->
+<div class="energy-divider"><div class="wave"></div><div class="wave"></div><div class="wave"></div><div class="wave"></div></div>
+
+<section class="process holo-shimmer" id="process">
+  <div class="floating-orb orb-gold" style="width:250px;height:250px;top:20%;right:-4%;animation-delay:-5s;"></div>
+  <div class="section-inner">
+    <div class="section-header-center gs-reveal">
+      <span class="section-tag" style="justify-content: center;">how it works</span>
+      <h2 class="section-title">From First Call to Live System</h2>
+      <p class="section-sub">No six-month timelines. We move fast and ship real working systems.</p>
+    </div>
+
+    <div class="steps-grid">
+      <div class="step gs-reveal">
+        <img class="step-img" src="images/process/01-audit-meeting.webp" alt="Business AI audit meeting" loading="lazy" decoding="async">
+        <div class="step-num">01</div>
+        <div class="step-title">AI Audit</div>
+        <div class="step-body">We analyze your business, your biggest time-wasters, and your highest-opportunity touchpoints. You get a clear picture of what AI can actually do for you &mdash; no sales pitch.</div>
+      </div>
+      <div class="step gs-reveal">
+        <img class="step-img" src="images/process/02-architecture-design.webp" alt="System architecture design" loading="lazy" decoding="async">
+        <div class="step-num">02</div>
+        <div class="step-title">System Design</div>
+        <div class="step-body">We architect the exact system for your use case &mdash; selecting the right APIs, platforms, and stack. No bloat, no over-engineering. Just what works.</div>
+      </div>
+      <div class="step gs-reveal">
+        <img class="step-img" src="images/process/03-developer-coding.webp" alt="Developer coding AI system" loading="lazy" decoding="async">
+        <div class="step-num">03</div>
+        <div class="step-title">Build &amp; Test</div>
+        <div class="step-body">We build fast. Production-grade code, tested against real scenarios, iterated with your feedback. You see progress in days, not months.</div>
+      </div>
+      <div class="step gs-reveal">
+        <img class="step-img" src="images/process/04-deployment-support.webp" alt="Team deployment and support" loading="lazy" decoding="async">
+        <div class="step-num">04</div>
+        <div class="step-title">Deploy &amp; Support</div>
+        <div class="step-body">We go live. Full deployment, staff training if needed, and ongoing support so your system keeps running and keeps improving.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+     TECH STACK
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+<div class="stack" id="stack">
+  <div class="stack-label gs-reveal">Powered by the best in AI infrastructure</div>
+  <div class="stack-logos gs-reveal">
+    <div class="stack-chip"><span class="sc-dot" style="background:#4A90D9;"></span> Gemini API</div>
+    <div class="stack-chip"><span class="sc-dot" style="background:#10B981;"></span> Grok API</div>
+    <div class="stack-chip"><span class="sc-dot" style="background:#8B5CF6;"></span> VAPI Voice</div>
+    <div class="stack-chip"><span class="sc-dot" style="background:#F59E0B;"></span> ComfyUI</div>
+    <div class="stack-chip"><span class="sc-dot" style="background:#06B6D4;"></span> React / TypeScript</div>
+    <div class="stack-chip"><span class="sc-dot" style="background:#EF4444;"></span> Python / Flask</div>
+    <div class="stack-chip"><span class="sc-dot" style="background:#0EA5E9;"></span> Google Calendar API</div>
+    <div class="stack-chip"><span class="sc-dot" style="background:#F97316;"></span> FLUX / Stable Diffusion</div>
+    <div class="stack-chip"><span class="sc-dot" style="background:#6366F1;"></span> GPT Image</div>
+    <div class="stack-chip"><span class="sc-dot" style="background:#14B8A6;"></span> Netlify / Render</div>
+    <div class="stack-chip"><span class="sc-dot" style="background:#8fa3b8;"></span> PowerShell Automation</div>
+    <div class="stack-chip"><span class="sc-dot" style="background:#22C55E;"></span> InsightFace AI</div>
+    <div class="stack-chip"><span class="sc-dot" style="background:#EC4899;"></span> Supabase</div>
+    <div class="stack-chip"><span class="sc-dot" style="background:#A855F7;"></span> Stripe</div>
+    <div class="stack-chip"><span class="sc-dot" style="background:#3B82F6;"></span> Electron</div>
+    <div class="stack-chip"><span class="sc-dot" style="background:#F43F5E;"></span> RunPod GPU</div>
+    <div class="stack-chip"><span class="sc-dot" style="background:#84CC16;"></span> Ollama / Gemma</div>
+    <div class="stack-chip"><span class="sc-dot" style="background:#FB923C;"></span> ACE-Step AI Music</div>
+  </div>
+</div>
+
+<!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+     RESULTS / TESTIMONIALS
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+<!-- ENERGY DIVIDER -->
+<div class="energy-divider"><div class="wave"></div><div class="wave"></div><div class="wave"></div><div class="wave"></div></div>
+
+<section class="results holo-shimmer" id="results">
+  <div class="floating-orb orb-cyan" style="width:280px;height:280px;bottom:10%;left:-6%;animation-delay:-12s;"></div>
+  <div class="floating-orb orb-gold" style="width:180px;height:180px;top:5%;right:-2%;animation-delay:-7s;"></div>
+  <div class="section-inner">
+    <div class="section-header-center gs-reveal">
+      <span class="section-tag" style="justify-content: center;">real results</span>
+      <h2 class="section-title">What Our Clients Experience</h2>
+      <p class="section-sub">Real businesses. Real AI systems. Real impact on operations and revenue.</p>
+    </div>
+
+    <div class="results-grid">
+      <div class="result-card gs-reveal">
+        <div class="result-quote">"The AI phone agent picks up every call, books appointments automatically, and sends confirmations. We haven't missed a lead since it went live."</div>
+        <div class="result-author">Local Service Business</div>
+        <div class="result-role">AI Voice Agent Deployment</div>
+      </div>
+      <div class="result-card gs-reveal">
+        <div class="result-quote">"Tony built us an entire AI imaging pipeline. What took our team hours now runs in minutes &mdash; fully automated batch processing with face detection."</div>
+        <div class="result-author">Photo &amp; Events Company</div>
+        <div class="result-role">AI Image Pipeline System</div>
+      </div>
+      <div class="result-card gs-reveal">
+        <div class="result-quote">"He didn't just give us advice &mdash; he built the actual system. A real CRM with AI built in, calendar sync, the whole thing. It just works."</div>
+        <div class="result-author">Small Business Owner</div>
+        <div class="result-role">AI CRM &amp; Automation Platform</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+     CTA
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+<!-- ENERGY DIVIDER -->
+<div class="energy-divider"><div class="wave"></div><div class="wave"></div><div class="wave"></div><div class="wave"></div></div>
+
+<section class="cta-section" id="contact">
+  <div class="cta-inner gs-reveal">
+    <span class="cta-tag">ready to automate?</span>
+    <h2 class="cta-title">Let's Build Your<br>AI Infrastructure</h2>
+    <p class="cta-sub">
+      Whether you need an AI phone assistant, a custom automation pipeline, or a full business intelligence system &mdash; we've built it before and we'll build it better for you.
+    </p>
+    <div class="cta-actions">
+      <a href="mailto:tony@theaiguru.biz" class="btn-cta-primary">
+        Book AI Audit
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <a href="tel:+1-856-577-0236" class="btn-cta-outline">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 2.5c0-.3.2-.5.5-.5h2.1c.2 0 .4.2.5.4l.9 2.5c.1.2 0 .5-.2.7L5.7 6.6A9.5 9.5 0 009.4 10.3l1.5-1.1c.2-.1.5-.2.7-.1l2.5.9c.2.1.4.3.4.5v2.1c0 .3-.2.5-.5.5C6.4 13 3 9.6 3 5.5v-3z" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        (856) 577-0236
+      </a>
+    </div>
+    <div class="cta-location">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 14.5s5-4.5 5-9a5 5 0 10-10 0c0 4.5 5 9 5 9z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><circle cx="8" cy="5.5" r="1.8" stroke="currentColor" stroke-width="1.4"/></svg>
+      Mt. Holly, New Jersey
+    </div>
+  </div>
+</section>
+
+<!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+     FOOTER
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">THEAI<span>GURU</span></div>
+    <ul class="footer-links">
+      <li><a href="#services">Services</a></li>
+      <li><a href="#process">Process</a></li>
+      <li><a href="#results">Results</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <div class="footer-copy">&copy; 2026 TheAIGuru.biz &middot; Photo Illusions AI Division &middot; Mt. Holly, NJ &middot; All rights reserved</div>
+  </div>
+</footer>
+
+<!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+     AI AGENT CHATBOT
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+<button class="ai-agent-fab" id="agent-toggle" aria-label="Chat with AI Agent">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 2a7 7 0 017 7v1a7 7 0 01-14 0V9a7 7 0 017-7z"/>
+    <path d="M8 10h.01M16 10h.01"/>
+    <path d="M9 14c.8.8 2.2 1.5 3 1.5s2.2-.7 3-1.5"/>
+    <path d="M5 9V7M19 9V7"/>
+    <path d="M12 18v4M8 22h8"/>
+  </svg>
+</button>
+
+<div class="ai-chat-panel" id="ai-chat-panel">
+  <div class="chat-header">
+    <div class="chat-avatar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <circle cx="12" cy="12" r="3"/>
+        <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+      </svg>
+    </div>
+    <div class="chat-header-info">
+      <div class="chat-header-name">GURU AI AGENT</div>
+      <div class="chat-header-status">Online &middot; Ready to help</div>
+    </div>
+    <button class="chat-close" id="chat-close">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+  </div>
+
+  <div class="chat-messages" id="chat-messages">
+    <div class="chat-msg bot">Hey there! &#x1F916; I'm the Guru AI Agent. I can tell you about our AI services, pricing, process, or anything else. What can I help you with?</div>
+  </div>
+
+  <div class="chat-input-area">
+    <input type="text" class="chat-input" id="chat-input" placeholder="Ask about our AI services..." autocomplete="off">
+    <button class="chat-send" id="chat-send">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4z"/></svg>
+    </button>
+  </div>
+</div>
+
+<!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+     SCRIPTS
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+<script>
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   PRELOADER
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    document.getElementById('preloader').classList.add('hidden');
+  }, 1200);
+});
+
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   CUSTOM CURSOR
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+const cursorDot = document.querySelector('.cursor-dot');
+const cursorRing = document.querySelector('.cursor-ring');
+
+if (window.matchMedia('(pointer: fine)').matches) {
+  document.addEventListener('mousemove', e => {
+    cursorDot.style.left = e.clientX - 4 + 'px';
+    cursorDot.style.top = e.clientY - 4 + 'px';
+    cursorRing.style.left = e.clientX + 'px';
+    cursorRing.style.top = e.clientY + 'px';
+  });
+
+  document.querySelectorAll('a, button, .b-card, .step, .stack-chip, .result-card').forEach(el => {
+    el.addEventListener('mouseenter', () => cursorRing.classList.add('hover'));
+    el.addEventListener('mouseleave', () => cursorRing.classList.remove('hover'));
+  });
+}
+
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   FLOATING PARTICLES CANVAS
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+const particlesCanvas = document.getElementById('particles-canvas');
+const pCtx = particlesCanvas.getContext('2d');
+let pW, pH, particles = [];
+
+function resizeParticles() {
+  pW = particlesCanvas.width = window.innerWidth;
+  pH = particlesCanvas.height = window.innerHeight;
+}
+function initParticles(count) {
+  particles = [];
+  for (let i = 0; i < count; i++) {
+    particles.push({
+      x: Math.random() * pW,
+      y: Math.random() * pH,
+      vx: (Math.random() - 0.5) * 0.3,
+      vy: (Math.random() - 0.5) * 0.3,
+      r: Math.random() * 1.5 + 0.5,
+      gold: Math.random() < 0.1
+    });
+  }
+}
+function drawParticles() {
+  pCtx.clearRect(0, 0, pW, pH);
+  for (let i = 0; i < particles.length; i++) {
+    const p = particles[i];
+    for (let j = i + 1; j < particles.length; j++) {
+      const q = particles[j];
+      const dx = p.x - q.x, dy = p.y - q.y;
+      const d = Math.sqrt(dx*dx + dy*dy);
+      if (d < 120) {
+        const alpha = (1 - d/120) * 0.06;
+        pCtx.strokeStyle = p.gold || q.gold
+          ? `rgba(184,144,42,${alpha})`
+          : `rgba(139,21,48,${alpha})`;
+        pCtx.lineWidth = 0.5;
+        pCtx.beginPath();
+        pCtx.moveTo(p.x, p.y);
+        pCtx.lineTo(q.x, q.y);
+        pCtx.stroke();
+      }
+    }
+    pCtx.beginPath();
+    pCtx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+    pCtx.fillStyle = p.gold ? 'rgba(184,144,42,0.35)' : 'rgba(139,21,48,0.22)';
+    pCtx.fill();
+    p.x += p.vx; p.y += p.vy;
+    if (p.x < 0 || p.x > pW) p.vx *= -1;
+    if (p.y < 0 || p.y > pH) p.vy *= -1;
+  }
+  requestAnimationFrame(drawParticles);
+}
+resizeParticles();
+initParticles(40);
+drawParticles();
+window.addEventListener('resize', () => { resizeParticles(); initParticles(40); });
+
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   THREE.JS â€” 3D HERO BACKGROUND
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+(function init3D() {
+  const container = document.getElementById('hero-3d');
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+  camera.position.z = 30;
+
+  const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  container.appendChild(renderer.domElement);
+
+  /* Particle sphere â€” neural network style */
+  const nodeCount = 200;
+  const positions = new Float32Array(nodeCount * 3);
+  const colors = new Float32Array(nodeCount * 3);
+  const cyanColor = new THREE.Color(0x00d4ff);
+  const goldColor = new THREE.Color(0xf5c542);
+  const purpleColor = new THREE.Color(0xa78bfa);
+
+  for (let i = 0; i < nodeCount; i++) {
+    const phi = Math.acos(2 * Math.random() - 1);
+    const theta = 2 * Math.PI * Math.random();
+    const r = 12 + (Math.random() - 0.5) * 4;
+    positions[i*3]     = r * Math.sin(phi) * Math.cos(theta);
+    positions[i*3 + 1] = r * Math.sin(phi) * Math.sin(theta);
+    positions[i*3 + 2] = r * Math.cos(phi);
+
+    const pick = Math.random();
+    let c = pick < 0.6 ? cyanColor : pick < 0.85 ? purpleColor : goldColor;
+    colors[i*3] = c.r; colors[i*3+1] = c.g; colors[i*3+2] = c.b;
+  }
+
+  const pointsGeo = new THREE.BufferGeometry();
+  pointsGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+  pointsGeo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+  const pointsMat = new THREE.PointsMaterial({
+    size: 0.18,
+    vertexColors: true,
+    transparent: true,
+    opacity: 0.8,
+    sizeAttenuation: true
+  });
+
+  const pointsMesh = new THREE.Points(pointsGeo, pointsMat);
+  scene.add(pointsMesh);
+
+  /* Connection lines */
+  const lineGeo = new THREE.BufferGeometry();
+  const linePosArray = [];
+  const lineColorArray = [];
+  for (let i = 0; i < nodeCount; i++) {
+    for (let j = i + 1; j < nodeCount; j++) {
+      const dx = positions[i*3] - positions[j*3];
+      const dy = positions[i*3+1] - positions[j*3+1];
+      const dz = positions[i*3+2] - positions[j*3+2];
+      const d = Math.sqrt(dx*dx + dy*dy + dz*dz);
+      if (d < 5) {
+        linePosArray.push(
+          positions[i*3], positions[i*3+1], positions[i*3+2],
+          positions[j*3], positions[j*3+1], positions[j*3+2]
+        );
+        lineColorArray.push(0, 0.83, 1, 0, 0.83, 1);
+      }
+    }
+  }
+  lineGeo.setAttribute('position', new THREE.Float32BufferAttribute(linePosArray, 3));
+  lineGeo.setAttribute('color', new THREE.Float32BufferAttribute(lineColorArray, 3));
+  const lineMat = new THREE.LineBasicMaterial({
+    vertexColors: true,
+    transparent: true,
+    opacity: 0.12
+  });
+  const linesMesh = new THREE.LineSegments(lineGeo, lineMat);
+  scene.add(linesMesh);
+
+  /* Wireframe icosahedron */
+  const icoGeo = new THREE.IcosahedronGeometry(8, 1);
+  const icoMat = new THREE.MeshBasicMaterial({
+    color: 0x00d4ff,
+    wireframe: true,
+    transparent: true,
+    opacity: 0.06
+  });
+  const icoMesh = new THREE.Mesh(icoGeo, icoMat);
+  scene.add(icoMesh);
+
+  /* Outer ring */
+  const ringGeo = new THREE.TorusGeometry(16, 0.04, 16, 100);
+  const ringMat = new THREE.MeshBasicMaterial({
+    color: 0xa78bfa,
+    transparent: true,
+    opacity: 0.15
+  });
+  const ringMesh = new THREE.Mesh(ringGeo, ringMat);
+  ringMesh.rotation.x = Math.PI / 3;
+  scene.add(ringMesh);
+
+  /* Second ring */
+  const ring2Geo = new THREE.TorusGeometry(14, 0.03, 16, 100);
+  const ring2Mat = new THREE.MeshBasicMaterial({
+    color: 0xf5c542,
+    transparent: true,
+    opacity: 0.1
+  });
+  const ring2Mesh = new THREE.Mesh(ring2Geo, ring2Mat);
+  ring2Mesh.rotation.x = -Math.PI / 4;
+  ring2Mesh.rotation.y = Math.PI / 6;
+  scene.add(ring2Mesh);
+
+  let mouseX = 0, mouseY = 0;
+  document.addEventListener('mousemove', e => {
+    mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+    mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+  });
+
+  function animate() {
+    requestAnimationFrame(animate);
+    pointsMesh.rotation.y += 0.001;
+    pointsMesh.rotation.x += 0.0003;
+    linesMesh.rotation.y += 0.001;
+    linesMesh.rotation.x += 0.0003;
+    icoMesh.rotation.y -= 0.002;
+    icoMesh.rotation.x += 0.001;
+    ringMesh.rotation.z += 0.003;
+    ring2Mesh.rotation.z -= 0.002;
+
+    camera.position.x += (mouseX * 3 - camera.position.x) * 0.02;
+    camera.position.y += (-mouseY * 2 - camera.position.y) * 0.02;
+    camera.lookAt(scene.position);
+
+    renderer.render(scene, camera);
+  }
+  animate();
+
+  window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  });
+})();
+
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   NAV SCROLL EFFECT
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+const nav = document.querySelector('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 50);
+});
+
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   GSAP SCROLL ANIMATIONS
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+gsap.registerPlugin(ScrollTrigger);
+
+/* Standard reveal-up */
+gsap.utils.toArray('.gs-reveal').forEach(el => {
+  gsap.to(el, {
+    scrollTrigger: {
+      trigger: el,
+      start: 'top 85%',
+      toggleActions: 'play none none none'
+    },
+    opacity: 1,
+    y: 0,
+    duration: 0.8,
+    ease: 'power3.out'
+  });
+});
+
+/* Scale reveals */
+gsap.utils.toArray('.gs-reveal-scale').forEach(el => {
+  gsap.to(el, {
+    scrollTrigger: {
+      trigger: el,
+      start: 'top 85%',
+      toggleActions: 'play none none none'
+    },
+    opacity: 1,
+    scale: 1,
+    duration: 1,
+    ease: 'power3.out'
+  });
+});
+
+/* Stagger service cards */
+gsap.utils.toArray('.bento .b-card').forEach((card, i) => {
+  gsap.to(card, {
+    scrollTrigger: {
+      trigger: card,
+      start: 'top 90%',
+      toggleActions: 'play none none none'
+    },
+    opacity: 1,
+    y: 0,
+    duration: 0.6,
+    delay: i * 0.08,
+    ease: 'power2.out'
+  });
+});
+
+/* Stagger steps */
+gsap.utils.toArray('.step').forEach((step, i) => {
+  gsap.to(step, {
+    scrollTrigger: {
+      trigger: step,
+      start: 'top 90%',
+      toggleActions: 'play none none none'
+    },
+    opacity: 1,
+    y: 0,
+    duration: 0.6,
+    delay: i * 0.12,
+    ease: 'power2.out'
+  });
+});
+
+/* Stagger result cards */
+gsap.utils.toArray('.result-card').forEach((card, i) => {
+  gsap.to(card, {
+    scrollTrigger: {
+      trigger: card,
+      start: 'top 90%',
+      toggleActions: 'play none none none'
+    },
+    opacity: 1,
+    y: 0,
+    duration: 0.6,
+    delay: i * 0.1,
+    ease: 'power2.out'
+  });
+});
+
+/* Hero content entrance */
+gsap.fromTo('.hero-content', { opacity: 0, y: 50 }, {
+  opacity: 1, y: 0, duration: 1.2, delay: 1.4, ease: 'power3.out'
+});
+
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   COUNTER ANIMATION
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+const counters = document.querySelectorAll('.counter');
+const counterObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const el = entry.target;
+      const target = +el.dataset.target;
+      let current = 0;
+      const step = target / 60;
+      const timer = setInterval(() => {
+        current += step;
+        if (current >= target) {
+          el.textContent = target;
+          clearInterval(timer);
+        } else {
+          el.textContent = Math.floor(current);
+        }
+      }, 25);
+      counterObserver.unobserve(el);
+    }
+  });
+}, { threshold: 0.5 });
+counters.forEach(c => counterObserver.observe(c));
+
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   CARD MOUSE GLOW EFFECT
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+document.querySelectorAll('.b-card, .step, .result-card').forEach(card => {
+  card.addEventListener('mousemove', e => {
+    const rect = card.getBoundingClientRect();
+    card.style.setProperty('--mouse-x', (e.clientX - rect.left) + 'px');
+    card.style.setProperty('--mouse-y', (e.clientY - rect.top) + 'px');
+  });
+});
+
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   AI AGENT CHATBOT
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+const agentToggle = document.getElementById('agent-toggle');
+const chatPanel = document.getElementById('ai-chat-panel');
+const chatClose = document.getElementById('chat-close');
+const chatInput = document.getElementById('chat-input');
+const chatSend = document.getElementById('chat-send');
+const chatMessages = document.getElementById('chat-messages');
+
+agentToggle.addEventListener('click', () => {
+  chatPanel.classList.toggle('open');
+  if (chatPanel.classList.contains('open')) chatInput.focus();
+});
+chatClose.addEventListener('click', () => chatPanel.classList.remove('open'));
+
+function addMessage(text, type) {
+  const msg = document.createElement('div');
+  msg.className = 'chat-msg ' + type;
+  msg.textContent = text;
+  chatMessages.appendChild(msg);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+function showTyping() {
+  const typing = document.createElement('div');
+  typing.className = 'chat-typing';
+  typing.id = 'typing-indicator';
+  typing.innerHTML = '<span></span><span></span><span></span>';
+  chatMessages.appendChild(typing);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+function hideTyping() {
+  const t = document.getElementById('typing-indicator');
+  if (t) t.remove();
+}
+
+function getAIResponse(input) {
+  const lower = input.toLowerCase();
+
+  if (lower.match(/pric|cost|how much|afford|budget|rate/)) {
+    return "Our AI systems are custom-built, so pricing varies by scope. A basic AI voice agent starts around $1,500, while full automation suites can range from $5K-$15K+. The best way to get an accurate quote is to book an AI audit \u2014 we'll scope your exact needs. Email tony@theaiguru.biz or call (856) 577-0236!";
+  }
+  if (lower.match(/voice|phone|call|recept|assistant|vapi/)) {
+    return "Our AI Voice Agents are our flagship product! We build 24/7 AI receptionists powered by VAPI that answer calls, book appointments via Google Calendar, send SMS confirmations, and handle FAQs \u2014 all in your brand's voice. They're currently live in production for real businesses. Want to hear a demo?";
+  }
+  if (lower.match(/service|offer|do|build|what can/)) {
+    return "We build: \u2022 AI Voice Assistants & Phone Agents (24/7) \u2022 AI Image & Portrait Pipelines \u2022 Custom Web Applications (React/TypeScript) \u2022 Business Process Automation \u2022 AI CRM & Desktop Tools \u2022 AI Marketing & Content Systems \u2022 Full AI Consulting & Roadmapping. Everything is custom-built from scratch!";
+  }
+  if (lower.match(/process|how.*work|step|start|begin/)) {
+    return "Our process is simple: 1\uFE0F\u20E3 AI Audit \u2014 we analyze your business 2\uFE0F\u20E3 System Design \u2014 we architect the solution 3\uFE0F\u20E3 Build & Test \u2014 production-grade code, fast 4\uFE0F\u20E3 Deploy & Support \u2014 we go live with ongoing support. Most projects show progress in days, not months!";
+  }
+  if (lower.match(/tech|stack|tool|language|frame|python|react/)) {
+    return "We work with 20+ technologies including: Gemini API, Grok API, VAPI Voice, ComfyUI, React/TypeScript, Python/Flask, Google Calendar API, FLUX/Stable Diffusion, PowerShell, Electron, Supabase, Stripe, InsightFace AI, RunPod GPU, Ollama/Gemma, and more. We pick the best tool for each job.";
+  }
+  if (lower.match(/contact|reach|email|phone|call.*you|touch/)) {
+    return "You can reach us at: \ud83d\udce7 tony@theaiguru.biz \ud83d\udcde (856) 577-0236 \ud83c\udf10 theaiguru.biz \ud83d\udccd Mt. Holly, NJ. Book an AI audit and we'll show you exactly what AI can do for your business!";
+  }
+  if (lower.match(/who|about|tony|guru|team|company/)) {
+    return "TheAIGuru.biz is the AI Division of Photo Illusions, based in Mt. Holly, NJ. Founded by Tony George \u2014 an AI Software App Programmer & AI Plumber Specialist who has built 55+ custom AI systems. We're not resellers \u2014 we build everything from scratch with real code.";
+  }
+  if (lower.match(/image|photo|portrait|face|comfy|flux/)) {
+    return "Our AI Image Pipelines handle everything from batch portrait generation to face-swap systems and AI enhancement. We use ComfyUI, FLUX, Stable Diffusion, InsightFace ONNX, and Gemini's Image Model 3 Pro. Perfect for events, studios, e-commerce, and creative agencies.";
+  }
+  if (lower.match(/hello|hi|hey|sup|yo|greet/)) {
+    return "Hey! \ud83d\udc4b Welcome to TheAIGuru.biz! I'm here to help you learn about our AI services. You can ask me about our services, pricing, tech stack, process, or anything else. What would you like to know?";
+  }
+  if (lower.match(/thank|thanks|thx|appreciate/)) {
+    return "You're welcome! \ud83d\ude4f If you're ready to explore what AI can do for your business, book an audit at tony@theaiguru.biz or call (856) 577-0236. We'd love to chat!";
+  }
+  if (lower.match(/automat|workflow|pipeline|batch|script|powersh/)) {
+    return "We build automation pipelines using Python, PowerShell, and custom API integrations. Whether it's batch processing, data flows, reporting, or eliminating manual tasks \u2014 we automate it. Our systems handle everything from file processing to complex multi-step business workflows.";
+  }
+  if (lower.match(/crm|desktop|app|electron|tkinter/)) {
+    return "We build custom desktop applications including AI-powered CRMs with Gemini integration, Google Calendar sync, SQLite databases, and unified client management. Built with CustomTkinter (Python) or Electron \u2014 whatever fits your workflow best.";
+  }
+
+  return "Great question! I'd love to give you a detailed answer. For the most accurate info tailored to your business, I'd recommend booking an AI audit with Tony. Email tony@theaiguru.biz or call (856) 577-0236 \u2014 no pressure, just real insights into what AI can do for you.";
+}
+
+function handleSend() {
+  const text = chatInput.value.trim();
+  if (!text) return;
+  addMessage(text, 'user');
+  chatInput.value = '';
+  showTyping();
+  const delay = 800 + Math.random() * 1200;
+  setTimeout(() => {
+    hideTyping();
+    addMessage(getAIResponse(text), 'bot');
+  }, delay);
+}
+
+chatSend.addEventListener('click', handleSend);
+chatInput.addEventListener('keydown', e => {
+  if (e.key === 'Enter') handleSend();
+});
+
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   SMOOTH SCROLL FOR NAV LINKS
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+document.querySelectorAll('a[href^="#"]').forEach(link => {
+  link.addEventListener('click', e => {
+    const target = document.querySelector(link.getAttribute('href'));
+    if (target) {
+      e.preventDefault();
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+});
+
+
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   TECH STACK ANIMATION
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+gsap.to('.stack-logos', {
+  scrollTrigger: {
+    trigger: '.stack',
+    start: 'top 80%',
+    toggleActions: 'play none none none'
+  },
+  opacity: 1,
+  y: 0,
+  duration: 1,
+  ease: 'power2.out'
+});
+
+/* ═══════════════════════════════════
+   LIGHT STREAKS CANVAS (SHOOTING STARS)
+═══════════════════════════════════ */
+(function initStreaks() {
+  const sc = document.getElementById('streaks-canvas');
+  const sCtx = sc.getContext('2d');
+  let sW, sH;
+  const streaks = [];
+
+  function resizeStreaks() {
+    sW = sc.width = window.innerWidth;
+    sH = sc.height = window.innerHeight;
+  }
+  resizeStreaks();
+  window.addEventListener('resize', resizeStreaks);
+
+  function spawnStreak() {
+    const isGold = Math.random() < 0.15;
+    const isPurple = !isGold && Math.random() < 0.2;
+    streaks.push({
+      x: Math.random() * sW * 1.5 - sW * 0.25,
+      y: -10,
+      speed: 4 + Math.random() * 8,
+      length: 60 + Math.random() * 120,
+      angle: Math.PI / 4 + (Math.random() - 0.5) * 0.3,
+      alpha: 0.3 + Math.random() * 0.4,
+      color: isGold ? '240,180,41' : isPurple ? '139,92,246' : '0,212,255',
+      width: 0.5 + Math.random() * 1.5,
+      life: 1
+    });
+  }
+
+  function drawStreaks() {
+    sCtx.clearRect(0, 0, sW, sH);
+    for (let i = streaks.length - 1; i >= 0; i--) {
+      const s = streaks[i];
+      const dx = Math.cos(s.angle) * s.length;
+      const dy = Math.sin(s.angle) * s.length;
+      const grad = sCtx.createLinearGradient(s.x, s.y, s.x - dx, s.y - dy);
+      grad.addColorStop(0, `rgba(${s.color},${s.alpha * s.life})`);
+      grad.addColorStop(1, `rgba(${s.color},0)`);
+      sCtx.strokeStyle = grad;
+      sCtx.lineWidth = s.width;
+      sCtx.beginPath();
+      sCtx.moveTo(s.x, s.y);
+      sCtx.lineTo(s.x - dx, s.y - dy);
+      sCtx.stroke();
+
+      // bright head
+      sCtx.beginPath();
+      sCtx.arc(s.x, s.y, s.width, 0, Math.PI * 2);
+      sCtx.fillStyle = `rgba(255,255,255,${0.6 * s.life})`;
+      sCtx.fill();
+
+      s.x += Math.cos(s.angle) * s.speed;
+      s.y += Math.sin(s.angle) * s.speed;
+      s.life -= 0.003;
+      if (s.y > sH + 50 || s.x > sW + 50 || s.life <= 0) streaks.splice(i, 1);
+    }
+    if (Math.random() < 0.03) spawnStreak();
+    requestAnimationFrame(drawStreaks);
+  }
+  drawStreaks();
+})();
+
+/* ═══════════════════════════════════
+   DATA RAIN CANVAS (MATRIX-STYLE)
+═══════════════════════════════════ */
+(function initDataRain() {
+  const dc = document.getElementById('datarain-canvas');
+  const dCtx = dc.getContext('2d');
+  let dW, dH, columns, drops;
+  const chars = '01アイウエオカキクケコ∑∏∫√∞≈';
+
+  function resizeRain() {
+    dW = dc.width = window.innerWidth;
+    dH = dc.height = window.innerHeight;
+    columns = Math.floor(dW / 18);
+    drops = new Array(columns).fill(0).map(() => Math.random() * -100);
+  }
+  resizeRain();
+  window.addEventListener('resize', resizeRain);
+
+  function drawRain() {
+    dCtx.fillStyle = 'rgba(12,18,32,0.15)';
+    dCtx.fillRect(0, 0, dW, dH);
+    dCtx.font = '12px JetBrains Mono, monospace';
+    for (let i = 0; i < columns; i++) {
+      const ch = chars[Math.floor(Math.random() * chars.length)];
+      const x = i * 18;
+      const y = drops[i] * 18;
+      const brightness = Math.random();
+      if (brightness > 0.95) {
+        dCtx.fillStyle = 'rgba(245,197,66,0.5)';
+      } else if (brightness > 0.85) {
+        dCtx.fillStyle = 'rgba(123,30,46,0.4)';
+      } else {
+        dCtx.fillStyle = `rgba(192,28,74,${0.15 + Math.random() * 0.2})`;
+      }
+      dCtx.fillText(ch, x, y);
+      if (y > dH && Math.random() > 0.98) drops[i] = 0;
+      drops[i] += 0.4 + Math.random() * 0.3;
+    }
+  }
+  setInterval(drawRain, 80);
+})();
+
+/* ═══════════════════════════════════
+   3D CARD TILT ON HOVER
+═══════════════════════════════════ */
+document.querySelectorAll('.b-card, .step, .result-card').forEach(card => {
+  card.classList.add('tilt-active');
+  card.addEventListener('mousemove', e => {
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    const rotateX = ((y - centerY) / centerY) * -8;
+    const rotateY = ((x - centerX) / centerX) * 8;
+    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-4px) scale(1.02)`;
+  });
+  card.addEventListener('mouseleave', () => {
+    card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateY(0) scale(1)';
+    card.style.transition = 'transform 0.5s ease-out';
+    setTimeout(() => card.style.transition = 'transform 0.1s ease-out', 500);
+  });
+  card.addEventListener('mouseenter', () => {
+    card.style.transition = 'transform 0.1s ease-out';
+  });
+});
+
+/* ═══════════════════════════════════
+   MOUSE TRAIL (NEON COMET TAIL)
+═══════════════════════════════════ */
+(function initMouseTrail() {
+  const trailCount = 5;
+  const trails = [];
+  for (let i = 0; i < trailCount; i++) {
+    trails.push(document.getElementById('mouse-trail-' + i));
+  }
+  const positions = new Array(trailCount).fill(null).map(() => ({x: 0, y: 0}));
+  let mouseX = 0, mouseY = 0;
+  let isMoving = false;
+  let moveTimeout;
+
+  document.addEventListener('mousemove', e => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+    isMoving = true;
+    trails.forEach(t => t.style.opacity = '0.6');
+    clearTimeout(moveTimeout);
+    moveTimeout = setTimeout(() => {
+      isMoving = false;
+      trails.forEach(t => t.style.opacity = '0');
+    }, 150);
+  });
+
+  function animateTrail() {
+    positions[0].x += (mouseX - positions[0].x) * 0.3;
+    positions[0].y += (mouseY - positions[0].y) * 0.3;
+    for (let i = 1; i < trailCount; i++) {
+      positions[i].x += (positions[i-1].x - positions[i].x) * 0.25;
+      positions[i].y += (positions[i-1].y - positions[i].y) * 0.25;
+    }
+    for (let i = 0; i < trailCount; i++) {
+      const t = trails[i];
+      if (t) {
+        t.style.left = positions[i].x - 3 + 'px';
+        t.style.top = positions[i].y - 3 + 'px';
+        t.style.opacity = isMoving ? (0.5 - i * 0.1) : '0';
+        const scale = 1 - i * 0.15;
+        t.style.transform = `scale(${scale})`;
+        const hue = (i * 30);
+        t.style.background = i === 0 ? '#c01c4a' : i < 3 ? '#7b1e2e' : '#f5c542';
+      }
+    }
+    requestAnimationFrame(animateTrail);
+  }
+  if (window.matchMedia('(pointer: fine)').matches) animateTrail();
+})();
+
+/* ═══════════════════════════════════
+   SPEED LINES ON FAST SCROLL
+═══════════════════════════════════ */
+(function initSpeedLines() {
+  const container = document.getElementById('speed-lines');
+  let lastScroll = window.scrollY;
+  let scrollSpeed = 0;
+
+  window.addEventListener('scroll', () => {
+    scrollSpeed = Math.abs(window.scrollY - lastScroll);
+    lastScroll = window.scrollY;
+    if (scrollSpeed > 30) {
+      container.classList.add('active');
+      for (let i = 0; i < Math.min(scrollSpeed / 10, 8); i++) {
+        const line = document.createElement('div');
+        line.className = 'speed-line';
+        line.style.left = Math.random() * 100 + '%';
+        line.style.height = 40 + Math.random() * 100 + 'px';
+        line.style.animationDuration = 0.3 + Math.random() * 0.3 + 's';
+        const r = Math.random();
+        if (r < 0.1) line.style.background = 'linear-gradient(to bottom, transparent, rgba(245,197,66,0.3), transparent)';
+        else if (r < 0.25) line.style.background = 'linear-gradient(to bottom, transparent, rgba(123,30,46,0.3), transparent)';
+        container.appendChild(line);
+        setTimeout(() => line.remove(), 600);
+      }
+      setTimeout(() => container.classList.remove('active'), 300);
+    }
+  });
+})();
+
+/* ═══════════════════════════════════
+   PARALLAX DEPTH ON SCROLL
+═══════════════════════════════════ */
+(function initParallax() {
+  const parallaxElements = [
+    { selector: '.hero-content', speed: 0.3 },
+    { selector: '.section-header', speed: 0.15 },
+    { selector: '.section-header-center', speed: 0.15 },
+    { selector: '.floating-orb', speed: -0.2 },
+  ];
+
+  window.addEventListener('scroll', () => {
+    const scrollY = window.scrollY;
+    parallaxElements.forEach(({ selector, speed }) => {
+      document.querySelectorAll(selector).forEach(el => {
+        const rect = el.getBoundingClientRect();
+        const inView = rect.top < window.innerHeight && rect.bottom > 0;
+        if (inView) {
+          const offset = (rect.top - window.innerHeight / 2) * speed;
+          el.style.transform = `translateY(${offset}px)`;
+        }
+      });
+    });
+  });
+})();
+
+/* ═══════════════════════════════════
+   ENHANCED PARTICLE MOUSE INTERACTION
+═══════════════════════════════════ */
+(function upgradeParticles() {
+  let particleMouseX = -9999, particleMouseY = -9999;
+  document.addEventListener('mousemove', e => {
+    particleMouseX = e.clientX;
+    particleMouseY = e.clientY;
+  });
+
+  const origDraw = drawParticles;
+  function enhancedDraw() {
+    pCtx.clearRect(0, 0, pW, pH);
+    for (let i = 0; i < particles.length; i++) {
+      const p = particles[i];
+      // Mouse attraction
+      const dx = particleMouseX - p.x;
+      const dy = particleMouseY - p.y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist < 200 && dist > 5) {
+        const force = (200 - dist) / 200 * 0.08;
+        p.vx += (dx / dist) * force;
+        p.vy += (dy / dist) * force;
+      }
+      // Damping
+      p.vx *= 0.98;
+      p.vy *= 0.98;
+      // Speed limit
+      const spd = Math.sqrt(p.vx * p.vx + p.vy * p.vy);
+      if (spd > 2) { p.vx *= 2/spd; p.vy *= 2/spd; }
+
+      for (let j = i + 1; j < particles.length; j++) {
+        const q = particles[j];
+        const cdx = p.x - q.x, cdy = p.y - q.y;
+        const d = Math.sqrt(cdx*cdx + cdy*cdy);
+        if (d < 150) {
+          const alpha = (1 - d/150) * 0.15;
+          pCtx.strokeStyle = p.gold || q.gold
+            ? `rgba(245,197,66,${alpha})`
+            : `rgba(192,28,74,${alpha})`;
+          pCtx.lineWidth = 0.5;
+          pCtx.beginPath();
+          pCtx.moveTo(p.x, p.y);
+          pCtx.lineTo(q.x, q.y);
+          pCtx.stroke();
+        }
+      }
+
+      // Draw particle with glow when near mouse
+      const glowSize = dist < 200 ? p.r * (1 + (200 - dist) / 200 * 2) : p.r;
+      pCtx.beginPath();
+      pCtx.arc(p.x, p.y, glowSize, 0, Math.PI*2);
+      if (dist < 200) {
+        const glowAlpha = (200 - dist) / 200 * 0.6;
+        pCtx.fillStyle = p.gold ? `rgba(245,197,66,${0.5 + glowAlpha})` : `rgba(192,28,74,${0.35 + glowAlpha})`;
+        pCtx.shadowBlur = 15;
+        pCtx.shadowColor = p.gold ? '#f5c542' : '#c01c4a';
+      } else {
+        pCtx.fillStyle = p.gold ? 'rgba(245,197,66,0.5)' : 'rgba(192,28,74,0.35)';
+        pCtx.shadowBlur = 0;
+      }
+      pCtx.fill();
+      pCtx.shadowBlur = 0;
+
+      p.x += p.vx; p.y += p.vy;
+      if (p.x < 0 || p.x > pW) p.vx *= -1;
+      if (p.y < 0 || p.y > pH) p.vy *= -1;
+    }
+    requestAnimationFrame(enhancedDraw);
+  }
+  // Replace the original particle draw with the enhanced version
+  // We need to increase particle count too
+  initParticles(80);
+  enhancedDraw();
+})();
+
+/* ═══════════════════════════════════
+   HERO 3D ENHANCEMENT - MORE OBJECTS
+═══════════════════════════════════ */
+(function enhance3DHero() {
+  const container = document.getElementById('hero-3d');
+  if (!container || !container.children[0]) return;
+
+  // Add floating text geometry labels using CSS overlays
+  const floatLabel = document.createElement('div');
+  floatLabel.style.cssText = `
+    position: absolute; top: 15%; left: 8%;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem; color: rgba(192,28,74,0.15);
+    letter-spacing: 0.2em; text-transform: uppercase;
+    pointer-events: none; z-index: 1;
+    animation: orbFloat 15s ease-in-out infinite;
+  `;
+  floatLabel.textContent = '// neural_network.init()';
+  container.appendChild(floatLabel);
+
+  const floatLabel2 = document.createElement('div');
+  floatLabel2.style.cssText = `
+    position: absolute; bottom: 20%; right: 10%;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem; color: rgba(123,30,46,0.12);
+    letter-spacing: 0.2em; text-transform: uppercase;
+    pointer-events: none; z-index: 1;
+    animation: orbFloat 18s ease-in-out infinite reverse;
+  `;
+  floatLabel2.textContent = 'AI_CORE :: ACTIVE';
+  container.appendChild(floatLabel2);
+
+  const floatLabel3 = document.createElement('div');
+  floatLabel3.style.cssText = `
+    position: absolute; top: 30%; right: 15%;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.55rem; color: rgba(245,197,66,0.1);
+    letter-spacing: 0.15em;
+    pointer-events: none; z-index: 1;
+    animation: orbFloat 22s ease-in-out infinite;
+  `;
+  floatLabel3.textContent = '{ status: "deployed" }';
+  container.appendChild(floatLabel3);
+})();
+
+/* ═══════════════════════════════════
+   ELECTRIC RIPPLE ON CLICK
+═══════════════════════════════════ */
+document.addEventListener('click', e => {
+  const ripple = document.createElement('div');
+  ripple.style.cssText = `
+    position: fixed;
+    left: ${e.clientX}px; top: ${e.clientY}px;
+    width: 4px; height: 4px;
+    border: 1px solid rgba(192,28,74,0.6);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 10000;
+    transform: translate(-50%, -50%);
+    animation: clickRipple 0.8s ease-out forwards;
+  `;
+  document.body.appendChild(ripple);
+  setTimeout(() => ripple.remove(), 800);
+});
+
+// Inject the click ripple keyframe
+const rippleStyle = document.createElement('style');
+rippleStyle.textContent = `
+  @keyframes clickRipple {
+    0% { width: 4px; height: 4px; opacity: 0.8; border-width: 2px; }
+    100% { width: 150px; height: 150px; opacity: 0; border-width: 0.5px; }
+  }
+`;
+document.head.appendChild(rippleStyle);
+
+/* ═══════════════════════════════════
+   SECTION HEADER GLOW ON SCROLL-IN
+═══════════════════════════════════ */
+gsap.utils.toArray('.section-title').forEach(title => {
+  gsap.fromTo(title, 
+    { textShadow: '0 0 0px transparent' },
+    {
+      scrollTrigger: {
+        trigger: title,
+        start: 'top 80%',
+        toggleActions: 'play none none reverse'
+      },
+      textShadow: '0 0 30px rgba(192,28,74,0.2), 0 0 60px rgba(192,28,74,0.1)',
+      duration: 1.5,
+      ease: 'power2.out'
+    }
+  );
+});
+
+/* ═══════════════════════════════════
+   TYPEWRITER EFFECT ON HERO EYEBROW
+═══════════════════════════════════ */
+(function initTypewriter() {
+  const eyebrow = document.querySelector('.hero-eyebrow');
+  if (!eyebrow) return;
+  const texts = [
+    'AI Business Automation \u00B7 Mt. Holly, NJ',
+    '55+ Custom AI Systems Deployed',
+    '24/7 AI Voice Agents \u00B7 Live Now',
+    'Built From Scratch \u00B7 Real Code'
+  ];
+  let textIndex = 0;
+  let charIndex = 0;
+  let isDeleting = false;
+  const dot = eyebrow.querySelector('.eyebrow-dot');
+
+  function type() {
+    const current = texts[textIndex];
+    if (isDeleting) {
+      charIndex--;
+      eyebrow.textContent = current.substring(0, charIndex);
+    } else {
+      charIndex++;
+      eyebrow.textContent = current.substring(0, charIndex);
+    }
+    if (dot) eyebrow.prepend(dot);
+
+    if (!isDeleting && charIndex === current.length) {
+      setTimeout(() => { isDeleting = true; type(); }, 3000);
+      return;
+    }
+    if (isDeleting && charIndex === 0) {
+      isDeleting = false;
+      textIndex = (textIndex + 1) % texts.length;
+      setTimeout(type, 500);
+      return;
+    }
+    setTimeout(type, isDeleting ? 30 : 60);
+  }
+  // Start after preloader
+  setTimeout(type, 3000);
+})();
+
+/* ═══════════════════════════════════
+   AUDIO ENGINE — SOUND FX + AMBIENT JAZZ
+═══════════════════════════════════ */
+(function initAudioEngine() {
+  let audioCtx = null;
+  let masterGain = null;
+  let musicGain = null;
+  let sfxGain = null;
+  let musicStarted = false;
+  let userInteracted = false;
+
+  function getCtx() {
+    if (!audioCtx) {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      masterGain = audioCtx.createGain();
+      masterGain.gain.value = 0.5;
+      masterGain.connect(audioCtx.destination);
+      sfxGain = audioCtx.createGain();
+      sfxGain.gain.value = 0.5;
+      sfxGain.connect(masterGain);
+      musicGain = audioCtx.createGain();
+      musicGain.gain.value = 0.0;
+      musicGain.connect(masterGain);
+    }
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    return audioCtx;
+  }
+
+  /* ──── SFX helpers ──── */
+  function playTone(freq, dur, type, vol, detune) {
+    const ctx = getCtx();
+    const osc = ctx.createOscillator();
+    const g = ctx.createGain();
+    osc.type = type || 'sine';
+    osc.frequency.value = freq;
+    if (detune) osc.detune.value = detune;
+    g.gain.setValueAtTime(vol || 0.12, ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + dur);
+    osc.connect(g);
+    g.connect(sfxGain);
+    osc.start(ctx.currentTime);
+    osc.stop(ctx.currentTime + dur);
+  }
+
+  function playNoise(dur, vol) {
+    const ctx = getCtx();
+    const bufSize = ctx.sampleRate * dur;
+    const buf = ctx.createBuffer(1, bufSize, ctx.sampleRate);
+    const data = buf.getChannelData(0);
+    for (let i = 0; i < bufSize; i++) data[i] = (Math.random() * 2 - 1) * 0.3;
+    const src = ctx.createBufferSource();
+    src.buffer = buf;
+    const g = ctx.createGain();
+    const filt = ctx.createBiquadFilter();
+    filt.type = 'highpass';
+    filt.frequency.value = 3000;
+    g.gain.setValueAtTime(vol || 0.06, ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + dur);
+    src.connect(filt);
+    filt.connect(g);
+    g.connect(sfxGain);
+    src.start(ctx.currentTime);
+  }
+
+  /* ──── Named SFX ──── */
+  function sfxHover() {
+    playTone(1200, 0.08, 'sine', 0.06);
+    playTone(1800, 0.06, 'sine', 0.03);
+  }
+
+  function sfxClick() {
+    playTone(800, 0.1, 'triangle', 0.1);
+    playTone(1600, 0.08, 'sine', 0.06);
+    playNoise(0.04, 0.04);
+  }
+
+  function sfxWhoosh() {
+    const ctx = getCtx();
+    const osc = ctx.createOscillator();
+    const g = ctx.createGain();
+    const filt = ctx.createBiquadFilter();
+    osc.type = 'sawtooth';
+    osc.frequency.setValueAtTime(200, ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(80, ctx.currentTime + 0.3);
+    filt.type = 'lowpass';
+    filt.frequency.setValueAtTime(2000, ctx.currentTime);
+    filt.frequency.exponentialRampToValueAtTime(200, ctx.currentTime + 0.3);
+    g.gain.setValueAtTime(0.04, ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3);
+    osc.connect(filt);
+    filt.connect(g);
+    g.connect(sfxGain);
+    osc.start(ctx.currentTime);
+    osc.stop(ctx.currentTime + 0.35);
+  }
+
+  function sfxSectionEnter() {
+    const notes = [523.25, 659.25, 783.99]; // C5 E5 G5
+    notes.forEach((n, i) => {
+      setTimeout(() => playTone(n, 0.4, 'sine', 0.05), i * 60);
+    });
+  }
+
+  function sfxChime() {
+    playTone(1046.5, 0.6, 'sine', 0.05);
+    playTone(1318.5, 0.5, 'sine', 0.03);
+    playTone(1568, 0.4, 'sine', 0.02);
+  }
+
+  /* ──── Attach SFX to DOM ──── */
+  function attachSFX() {
+    // Hover sounds on interactive cards & buttons
+    document.querySelectorAll('.b-card, .step, .result-card, .btn-primary, .btn-outline, .nav-link').forEach(el => {
+      el.addEventListener('mouseenter', sfxHover, { passive: true });
+    });
+
+    // Click sounds
+    document.querySelectorAll('a, button, .btn-primary, .btn-outline').forEach(el => {
+      el.addEventListener('click', sfxClick, { passive: true });
+    });
+
+    // Section enter chimes via ScrollTrigger
+    gsap.utils.toArray('section, .hero, .services, .process, .results, .cta-section').forEach(sec => {
+      ScrollTrigger.create({
+        trigger: sec,
+        start: 'top 70%',
+        onEnter: () => sfxSectionEnter(),
+        once: true
+      });
+    });
+
+    // Scroll whoosh (throttled)
+    let lastWhoosh = 0;
+    window.addEventListener('scroll', () => {
+      const now = Date.now();
+      const speed = Math.abs(window.scrollY - (window._lastScrollY || 0));
+      window._lastScrollY = window.scrollY;
+      if (speed > 60 && now - lastWhoosh > 800) {
+        lastWhoosh = now;
+        sfxWhoosh();
+      }
+    }, { passive: true });
+  }
+
+  /* ═══════════════════════════════════
+     BACKGROUND MUSIC — AUDIO FILE
+  ═══════════════════════════════════ */
+  let bgMusic = null;
+
+  function startAmbientJazz() {
+    if (musicStarted) return;
+    musicStarted = true;
+
+    bgMusic = new Audio('files/Slip%20of%20the%20Tongue.m4a');
+    bgMusic.loop = true;
+    bgMusic.volume = 0.25;
+    bgMusic.play().catch(() => {
+      // If autoplay blocked, retry on next interaction
+      const retry = () => {
+        bgMusic.play();
+        document.removeEventListener('click', retry);
+        document.removeEventListener('keydown', retry);
+      };
+      document.addEventListener('click', retry, { passive: true });
+      document.addEventListener('keydown', retry, { passive: true });
+    });
+  }
+
+  /* ── Audio control UI ── */
+  function createAudioControls() {
+    const panel = document.createElement('div');
+    panel.id = 'audio-controls';
+    panel.innerHTML = `
+      <button id="audio-toggle" title="Toggle Music & Sound">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M9 18V5l12-2v13"/>
+          <circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>
+        </svg>
+      </button>
+      <div id="audio-panel" class="audio-panel-hidden">
+        <label>Music <input type="range" id="music-vol" min="0" max="100" value="25"></label>
+        <label>SFX <input type="range" id="sfx-vol" min="0" max="100" value="50"></label>
+      </div>
+    `;
+    document.body.appendChild(panel);
+
+    const style = document.createElement('style');
+    style.textContent = `
+      #audio-controls {
+        position: fixed; bottom: 24px; right: 90px;
+        z-index: 9998; display: flex; flex-direction: column;
+        align-items: flex-end; gap: 8px;
+      }
+      #audio-toggle {
+        width: 44px; height: 44px; border-radius: 50%;
+        border: 1px solid rgba(245,197,66,0.3);
+        background: rgba(12,18,32,0.9);
+        backdrop-filter: blur(12px);
+        color: var(--gold); cursor: pointer;
+        display: flex; align-items: center; justify-content: center;
+        transition: all 0.3s; box-shadow: 0 0 20px rgba(245,197,66,0.15);
+      }
+      #audio-toggle:hover {
+        border-color: var(--gold);
+        box-shadow: 0 0 30px rgba(245,197,66,0.3);
+        transform: scale(1.1);
+      }
+      #audio-toggle.muted { color: var(--text-muted); border-color: var(--border); box-shadow: none; }
+      #audio-toggle.muted svg { opacity: 0.4; }
+      .audio-panel-hidden { display: none !important; }
+      #audio-panel {
+        background: rgba(12,18,32,0.95);
+        border: 1px solid rgba(245,197,66,0.2);
+        border-radius: 12px; padding: 12px 16px;
+        backdrop-filter: blur(12px);
+        display: flex; flex-direction: column; gap: 8px;
+        min-width: 160px;
+      }
+      #audio-panel label {
+        font-family: var(--font-mono);
+        font-size: 0.65rem; color: var(--text-mid);
+        display: flex; align-items: center; gap: 8px;
+        letter-spacing: 0.05em; text-transform: uppercase;
+      }
+      #audio-panel input[type=range] {
+        flex: 1; height: 3px; -webkit-appearance: none;
+        background: rgba(255,255,255,0.1); border-radius: 2px;
+        outline: none;
+      }
+      #audio-panel input[type=range]::-webkit-slider-thumb {
+        -webkit-appearance: none; width: 12px; height: 12px;
+        border-radius: 50%; background: var(--gold);
+        cursor: pointer; box-shadow: 0 0 8px rgba(245,197,66,0.4);
+      }
+    `;
+    document.head.appendChild(style);
+
+    let isMuted = false;
+    const toggle = document.getElementById('audio-toggle');
+    const audioPanel = document.getElementById('audio-panel');
+
+    toggle.addEventListener('click', () => {
+      if (!userInteracted) {
+        userInteracted = true;
+        getCtx();
+        attachSFX();
+        startAmbientJazz();
+      }
+      isMuted = !isMuted;
+      toggle.classList.toggle('muted', isMuted);
+      if (masterGain) {
+        masterGain.gain.linearRampToValueAtTime(isMuted ? 0 : 0.6, audioCtx.currentTime + 0.3);
+      }
+      if (bgMusic) {
+        if (isMuted) bgMusic.pause();
+        else bgMusic.play().catch(() => {});
+      }
+    });
+
+    toggle.addEventListener('mouseenter', () => {
+      audioPanel.classList.remove('audio-panel-hidden');
+    });
+    panel.addEventListener('mouseleave', () => {
+      audioPanel.classList.add('audio-panel-hidden');
+    });
+
+    document.getElementById('music-vol').addEventListener('input', e => {
+      if (bgMusic) bgMusic.volume = e.target.value / 100;
+      if (musicGain) musicGain.gain.linearRampToValueAtTime(e.target.value / 100 * 0.5, audioCtx.currentTime + 0.1);
+    });
+    document.getElementById('sfx-vol').addEventListener('input', e => {
+      if (sfxGain) sfxGain.gain.linearRampToValueAtTime(e.target.value / 100 * 0.7, audioCtx.currentTime + 0.1);
+    });
+  }
+
+  /* ── Auto-start on first interaction ── */
+  function onFirstInteraction() {
+    if (userInteracted) return;
+    userInteracted = true;
+    getCtx();
+    attachSFX();
+    startAmbientJazz();
+    document.removeEventListener('click', onFirstInteraction);
+    document.removeEventListener('scroll', onFirstInteraction);
+    document.removeEventListener('keydown', onFirstInteraction);
+    document.removeEventListener('mousemove', onFirstInteraction);
+    document.removeEventListener('touchstart', onFirstInteraction);
+  }
+
+  // Wait for DOM then set up
+  createAudioControls();
+
+  // Try to auto-start music immediately (browsers may block)
+  getCtx();
+  attachSFX();
+  startAmbientJazz();
+
+  // Fallback: if autoplay was blocked, start on first interaction
+  document.addEventListener('click', onFirstInteraction, { passive: true });
+  document.addEventListener('scroll', onFirstInteraction, { passive: true });
+  document.addEventListener('keydown', onFirstInteraction, { passive: true });
+  document.addEventListener('mousemove', onFirstInteraction, { passive: true });
+  document.addEventListener('touchstart', onFirstInteraction, { passive: true });
+})();
+</script>
+</body>
+</html>

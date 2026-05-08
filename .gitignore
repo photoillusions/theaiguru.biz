@@ -1,0 +1,22 @@
+# env / secrets
+.env
+.env.*
+!.env.example
+vapi/.env
+
+# python
+__pycache__/
+*.pyc
+.venv/
+
+# node / netlify
+node_modules/
+.netlify/
+
+# os
+Thumbs.db
+.DS_Store
+
+# editor
+*.bak
+*.tmp

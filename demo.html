@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Live Demo — TheAIGuru.biz</title>
+<meta name="description" content="Watch our Charter School SMS demo and see other production AI systems we've shipped.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 22 22'%3E%3Crect width='22' height='22' rx='5' fill='%238b1530'/%3E%3Ccircle cx='11' cy='11' r='3' fill='%23b8902a'/%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&amp;family=Inter:wght@300;400;500;600;700&amp;family=JetBrains+Mono:wght@300;400;500;600&amp;display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<link rel="stylesheet" href="assets/site.css">
+<link rel="stylesheet" href="assets/site-pages.css">
+</head>
+<body>
+<!-- PRELOADER -->
+<div id="preloader">
+  <div class="loader-ring"></div>
+  <div class="loader-text">Initializing AI Systems</div>
+</div>
+
+<!-- CUSTOM CURSOR -->
+<div class="cursor-dot"></div>
+<div class="cursor-ring"></div>
+
+<!-- FLOATING PARTICLES -->
+<canvas id="particles-canvas"></canvas>
+
+<!-- LIGHT STREAKS -->
+<canvas id="streaks-canvas"></canvas>
+
+<!-- DATA RAIN -->
+<canvas id="datarain-canvas"></canvas>
+
+<!-- SCANLINE OVERLAY -->
+<div class="scanline-overlay"></div>
+<div class="scanline-beam"></div>
+
+<!-- SPEED LINES ON SCROLL -->
+<div class="speed-lines" id="speed-lines"></div>
+
+<!-- MOUSE TRAIL -->
+<div class="mouse-trail" id="mouse-trail-0"></div>
+<div class="mouse-trail" id="mouse-trail-1"></div>
+<div class="mouse-trail" id="mouse-trail-2"></div>
+<div class="mouse-trail" id="mouse-trail-3"></div>
+<div class="mouse-trail" id="mouse-trail-4"></div>
+
+<!-- PAGE TRANSITION OVERLAYS -->
+<div class="page-fx" id="page-fx">
+  <div class="page-fx-curtain"></div>
+  <canvas class="page-fx-canvas"></canvas>
+</div>
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo" data-router-skip>
+      <div class="logo-mark">
+        <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+          <circle cx="11" cy="11" r="2.5" fill="white"/>
+          <line x1="11" y1="11" x2="4" y2="4" stroke="white" stroke-width="1.5"/>
+          <line x1="11" y1="11" x2="18" y2="4" stroke="white" stroke-width="1.5"/>
+          <line x1="11" y1="11" x2="18" y2="18" stroke="white" stroke-width="1.5"/>
+          <line x1="11" y1="11" x2="4" y2="18" stroke="white" stroke-width="1.5"/>
+          <line x1="11" y1="11" x2="11" y2="2" stroke="white" stroke-width="1.5"/>
+          <line x1="11" y1="11" x2="11" y2="20" stroke="white" stroke-width="1.5"/>
+          <circle cx="4" cy="4" r="1.5" fill="white" opacity="0.7"/>
+          <circle cx="18" cy="4" r="1.5" fill="white" opacity="0.7"/>
+          <circle cx="18" cy="18" r="1.5" fill="white" opacity="0.7"/>
+          <circle cx="4" cy="18" r="1.5" fill="white" opacity="0.7"/>
+          <circle cx="11" cy="2" r="1.5" fill="white" opacity="0.7"/>
+          <circle cx="11" cy="20" r="1.5" fill="white" opacity="0.7"/>
+        </svg>
+      </div>
+      <span class="logo-text">THEAI<span>GURU</span></span>
+    </a>
+
+    <ul class="nav-links">
+      <li><a href="services.html" data-page="services">Services</a></li>
+      <li><a href="demo.html" data-page="demo">Demo</a></li>
+      <li><a href="process.html" data-page="process">Process</a></li>
+      <li><a href="results.html" data-page="results">Results</a></li>
+      <li><a href="about.html" data-page="about">About</a></li>
+      <li><a href="contact.html" data-page="contact">Contact</a></li>
+    </ul>
+
+    <div class="nav-cta">
+      <a href="book.html" class="btn-nav" data-page="book">
+        Book Audit
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M8 4l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <button class="mobile-toggle" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+<main class="page" data-page-name="demo">
+<section class="video-section" id="demo">
+  <div class="section-header-center gs-reveal" style="max-width: 1200px; margin: 0 auto 3rem;">
+    <span class="section-tag" style="justify-content: center;">live demo</span>
+    <h2 class="section-title">Charter School Software</h2>
+    <p class="section-sub">A full custom-built management system designed and shipped for a real charter school &mdash; enrollment, scheduling, communications, and AI-assisted operations, all in one app.</p>
+  </div>
+  <div class="video-container gs-reveal-scale">
+    <div style="padding:56.25% 0 0 0;position:relative;width:100%;height:100%;">
+      <iframe src="https://player.vimeo.com/video/1187325955?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479"
+              frameborder="0"
+              allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
+              referrerpolicy="strict-origin-when-cross-origin"
+              style="position:absolute;top:0;left:0;width:100%;height:100%;"
+              title="CCCS-SMS-LiveDemo"></iframe>
+    </div>
+  </div>
+</section>
+<section class="portfolio-section">
+  <div class="section-inner">
+    <div class="section-header-center gs-reveal">
+      <span class="section-tag" style="justify-content:center;">project portfolio</span>
+      <h2 class="section-title">More Systems We've Shipped</h2>
+      <p class="section-sub">A selection of production AI systems built for real clients across multiple industries.</p>
+    </div>
+    <div class="portfolio-grid">
+      <div class="portfolio-card gs-reveal">
+        <div class="portfolio-icon"><svg viewBox="0 0 22 22" fill="none"><rect x="5" y="2" width="12" height="18" rx="2.5" stroke="currentColor" stroke-width="1.5"/><circle cx="11" cy="16" r="1.2" fill="currentColor"/></svg></div>
+        <h3>AI Voice Receptionist</h3>
+        <p>24/7 phone agent that books appointments, answers questions, and texts confirmations. Live in production.</p>
+        <div class="tech-pills"><span class="tech-pill">Vapi</span><span class="tech-pill">Python</span><span class="tech-pill">Google Calendar</span></div>
+      </div>
+      <div class="portfolio-card gs-reveal">
+        <div class="portfolio-icon"><svg viewBox="0 0 22 22" fill="none"><rect x="3" y="5" width="16" height="12" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M3 9h16" stroke="currentColor" stroke-width="1.3"/></svg></div>
+        <h3>Charter School SMS</h3>
+        <p>Unified school management platform &mdash; enrollment, scheduling, communications, AI-assisted operations.</p>
+        <div class="tech-pills"><span class="tech-pill">Electron</span><span class="tech-pill">Node.js</span><span class="tech-pill">SQLite</span></div>
+      </div>
+      <div class="portfolio-card gs-reveal">
+        <div class="portfolio-icon"><svg viewBox="0 0 22 22" fill="none"><rect x="2" y="4" width="18" height="14" rx="2.5" stroke="currentColor" stroke-width="1.5"/><circle cx="7.5" cy="10" r="1.8" stroke="currentColor" stroke-width="1.2"/></svg></div>
+        <h3>AI Image Pipeline</h3>
+        <p>Batch portrait generation & enhancement at scale. Used for events, studios, and e-commerce catalogs.</p>
+        <div class="tech-pills"><span class="tech-pill">Grok</span><span class="tech-pill">ComfyUI</span><span class="tech-pill">FLUX</span></div>
+      </div>
+      <div class="portfolio-card gs-reveal">
+        <div class="portfolio-icon"><svg viewBox="0 0 22 22" fill="none"><circle cx="11" cy="11" r="3.5" stroke="currentColor" stroke-width="1.5"/><path d="M11 2v5M11 15v5M2 11h5M15 11h5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+        <h3>Desktop CRM Suite</h3>
+        <p>Custom CRM with Gemini AI, Google Calendar sync, SQLite storage, and unified client management.</p>
+        <div class="tech-pills"><span class="tech-pill">CustomTkinter</span><span class="tech-pill">Gemini</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+<!-- AI INFRASTRUCTURE AUDIT -- INTAKE FORM MODAL -->
+<div class="intake-overlay" id="intake-overlay" aria-hidden="true">
+  <div class="intake-grid-bg"></div>
+  <div class="intake-scan"></div>
+  <div class="intake-modal" role="dialog" aria-modal="true" aria-labelledby="intake-title">
+    <button class="intake-close" id="intake-close" aria-label="Close">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+    <div class="intake-header">
+      <div class="intake-badge">
+        <span class="intake-pulse"></span>
+        AI INFRASTRUCTURE AUDIT &middot; INTAKE
+      </div>
+      <h2 id="intake-title" class="intake-title">Let's Map Your <span>AI Roadmap</span></h2>
+      <p class="intake-sub">Tell us about your business. Tony reviews every submission personally and follows up within one business day with your scoped audit plan.</p>
+      <div class="intake-progress"><div class="intake-progress-bar" id="intake-progress-bar"></div></div>
+    </div>
+    <form class="intake-form" id="intake-form" novalidate>
+      <div class="intake-section">
+        <div class="intake-section-title"><span class="intake-num">01</span> Company</div>
+        <div class="intake-row">
+          <label class="intake-field"><span>Full Name *</span><input type="text" name="name" required autocomplete="name"></label>
+          <label class="intake-field"><span>Title / Role</span><input type="text" name="title" autocomplete="organization-title"></label>
+        </div>
+        <div class="intake-row">
+          <label class="intake-field"><span>Company Name *</span><input type="text" name="company" required autocomplete="organization"></label>
+          <label class="intake-field"><span>Industry *</span><select name="industry" required>
+            <option value="">Select industry...</option>
+            <option>Professional Services</option><option>Real Estate</option><option>Legal</option>
+            <option>Healthcare / Medical</option><option>E-commerce / Retail</option>
+            <option>Education / Schools</option><option>Photography / Creative</option>
+            <option>Construction / Trades</option><option>Hospitality / Events</option>
+            <option>Manufacturing</option><option>Finance / Insurance</option><option>Other</option>
+          </select></label>
+        </div>
+        <div class="intake-row">
+          <label class="intake-field"><span>Business Email *</span><input type="email" name="email" required autocomplete="email"></label>
+          <label class="intake-field"><span>Phone *</span><input type="tel" name="phone" required autocomplete="tel"></label>
+        </div>
+        <label class="intake-field"><span>Website</span><input type="url" name="website" placeholder="https://" autocomplete="url"></label>
+      </div>
+
+      <div class="intake-section">
+        <div class="intake-section-title"><span class="intake-num">02</span> Scale</div>
+        <div class="intake-row">
+          <label class="intake-field"><span>Team Size *</span><select name="team_size" required>
+            <option value="">Select...</option><option>Just me</option><option>2-5</option><option>6-15</option><option>16-50</option><option>51-200</option><option>200+</option>
+          </select></label>
+          <label class="intake-field"><span>Annual Revenue</span><select name="revenue">
+            <option value="">Prefer not to say</option><option>Under $250K</option><option>$250K-$1M</option><option>$1M-$5M</option><option>$5M-$25M</option><option>$25M+</option>
+          </select></label>
+        </div>
+      </div>
+
+      <div class="intake-section">
+        <div class="intake-section-title"><span class="intake-num">03</span> What you need *</div>
+        <p class="intake-hint">Pick all that apply.</p>
+        <div class="intake-chips">
+          <label><input type="checkbox" name="needs" value="Voice Agent"><span>24/7 AI Voice Agent</span></label>
+          <label><input type="checkbox" name="needs" value="Workflow Automation"><span>Workflow Automation</span></label>
+          <label><input type="checkbox" name="needs" value="Custom Web App"><span>Custom Web App</span></label>
+          <label><input type="checkbox" name="needs" value="AI CRM"><span>AI CRM / Client Mgmt</span></label>
+          <label><input type="checkbox" name="needs" value="Image Pipeline"><span>AI Image Pipeline</span></label>
+          <label><input type="checkbox" name="needs" value="Email Automation"><span>Email Automation</span></label>
+          <label><input type="checkbox" name="needs" value="Document AI"><span>Document / OCR AI</span></label>
+          <label><input type="checkbox" name="needs" value="Reporting Dashboard"><span>Reporting Dashboard</span></label>
+          <label><input type="checkbox" name="needs" value="Stack Audit"><span>Stack Audit Only</span></label>
+          <label><input type="checkbox" name="needs" value="Not sure yet"><span>Not sure yet</span></label>
+        </div>
+      </div>
+
+      <div class="intake-section">
+        <div class="intake-section-title"><span class="intake-num">04</span> Current Stack</div>
+        <label class="intake-field"><span>Tools you use today (CRM, accounting, calendar, phone system, etc.)</span>
+          <textarea name="current_stack" rows="2" placeholder="e.g. HubSpot, QuickBooks, Google Workspace, Calendly, RingCentral..."></textarea>
+        </label>
+        <div class="intake-row">
+          <label class="intake-field"><span>Biggest bottleneck *</span>
+            <input type="text" name="bottleneck" required placeholder="What's eating the most time today?">
+          </label>
+          <label class="intake-field"><span>Hours/week lost to manual work</span>
+            <select name="hours_lost"><option value="">Estimate...</option><option>0-5</option><option>6-15</option><option>16-30</option><option>31-60</option><option>60+</option></select>
+          </label>
+        </div>
+      </div>
+
+      <div class="intake-section">
+        <div class="intake-section-title"><span class="intake-num">05</span> Project</div>
+        <div class="intake-row">
+          <label class="intake-field"><span>Budget range *</span>
+            <select name="budget" required>
+              <option value="">Select range...</option>
+              <option>$500 -- 90-min Consult only</option>
+              <option>$1,500 -- 2-Day Onsite Audit only</option>
+              <option>$2K-$10K build</option><option>$10K-$25K build</option>
+              <option>$25K-$75K build</option><option>$75K+ enterprise</option>
+              <option>Need help scoping</option>
+            </select>
+          </label>
+          <label class="intake-field"><span>Timeline *</span>
+            <select name="timeline" required>
+              <option value="">Select...</option>
+              <option>ASAP / This month</option><option>1-3 months</option>
+              <option>3-6 months</option><option>6+ months</option><option>Just exploring</option>
+            </select>
+          </label>
+        </div>
+        <label class="intake-field"><span>Anything else? Goals, constraints, dreams...</span>
+          <textarea name="notes" rows="3" placeholder="Optional but helpful."></textarea>
+        </label>
+      </div>
+
+      <div class="intake-section">
+        <div class="intake-section-title"><span class="intake-num">06</span> Engagement</div>
+        <div class="intake-radios">
+          <label><input type="radio" name="engagement" value="consult_500" checked><span><strong>$500</strong> &mdash; 90-min Consultation</span></label>
+          <label><input type="radio" name="engagement" value="audit_1500"><span><strong>$1,500</strong> &mdash; 2-Day Onsite Audit</span></label>
+          <label><input type="radio" name="engagement" value="discuss"><span><strong>Let's talk</strong> first</span></label>
+        </div>
+      </div>
+
+      <div class="intake-actions">
+        <button type="button" class="intake-btn-ghost" id="intake-cancel">Cancel</button>
+        <button type="submit" class="intake-btn-primary">
+          <span class="intake-btn-label">Submit Intake</span>
+          <span class="intake-btn-arrow">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </button>
+      </div>
+      <div class="intake-footnote">Encrypted in transit &middot; Tony reviews personally &middot; No spam, ever.</div>
+    </form>
+
+    <div class="intake-success" id="intake-success" hidden>
+      <div class="intake-success-ring"><svg viewBox="0 0 52 52"><circle cx="26" cy="26" r="23" fill="none"/><path d="M14 27l8 8 16-18" fill="none"/></svg></div>
+      <h3>Intake received</h3>
+      <p>Tony will reach out within one business day. Watch for a text from <strong>(856) 577-0236</strong>.</p>
+      <div class="intake-pay-block" id="intake-pay-block" hidden>
+        <div class="intake-pay-divider"><span>SECURE YOUR SLOT NOW</span></div>
+        <div class="intake-pay-card" id="intake-pay-card">
+          <div class="intake-pay-line">
+            <span class="intake-pay-name" id="intake-pay-name">90-min AI Consultation</span>
+            <span class="intake-pay-amt"  id="intake-pay-amt">$500</span>
+          </div>
+          <p class="intake-pay-note">Pay now to lock in a slot &mdash; full refund within 24 hours if you cancel.</p>
+          <button type="button" class="intake-btn-primary intake-btn-pay" id="intake-pay-now">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+            <span class="intake-btn-label">Pay Securely with Stripe</span>
+          </button>
+          <div class="intake-pay-trust">
+            <span>✓ 256-bit SSL</span><span>✓ PCI-compliant via Stripe</span><span>✓ We never see your card</span>
+          </div>
+        </div>
+        <button type="button" class="intake-btn-ghost intake-pay-skip" id="intake-done">Pay later &mdash; just close</button>
+      </div>
+      <button type="button" class="intake-btn-primary" id="intake-done-only" hidden>Done</button>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">THEAI<span>GURU</span></div>
+    <ul class="footer-links">
+      <li><a href="services.html" data-page="services">Services</a></li>
+      <li><a href="process.html" data-page="process">Process</a></li>
+      <li><a href="results.html" data-page="results">Results</a></li>
+      <li><a href="contact.html" data-page="contact">Contact</a></li>
+    </ul>
+    <div class="footer-copy">&copy; 2026 TheAIGuru.biz &middot; Photo Illusions AI Division &middot; Mt. Holly, NJ &middot; All rights reserved</div>
+  </div>
+</footer>
+
+<!-- AI AGENT CHATBOT -->
+<button class="ai-agent-fab" id="agent-toggle" aria-label="Chat with AI Agent">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 2a7 7 0 017 7v1a7 7 0 01-14 0V9a7 7 0 017-7z"/>
+    <path d="M8 10h.01M16 10h.01"/>
+    <path d="M9 14c.8.8 2.2 1.5 3 1.5s2.2-.7 3-1.5"/>
+    <path d="M5 9V7M19 9V7"/>
+    <path d="M12 18v4M8 22h8"/>
+  </svg>
+</button>
+
+<div class="ai-chat-panel" id="ai-chat-panel">
+  <div class="chat-header">
+    <div class="chat-avatar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <circle cx="12" cy="12" r="3"/>
+        <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+      </svg>
+    </div>
+    <div class="chat-header-info">
+      <div class="chat-header-name">GURU AI AGENT</div>
+      <div class="chat-header-status">Online &middot; Ready to help</div>
+    </div>
+    <button class="chat-close" id="chat-close">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+  </div>
+
+  <div class="chat-messages" id="chat-messages">
+    <div class="chat-msg bot">Hey! I'm the Guru AI Agent. We're two sides of one shop — <strong>TheAIGuru.biz</strong> for software &amp; AI builds, and <strong>Photo Illusions</strong> for photography &amp; entertainment. What brings you in today?</div>
+  </div>
+
+  <div class="chat-input-area">
+    <button class="chat-mic" id="chat-mic" title="Hold to speak" aria-label="Voice input">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0014 0"/><path d="M12 18v3M9 21h6"/></svg>
+    </button>
+    <input type="text" class="chat-input" id="chat-input" placeholder="Ask or tap mic to speak..." autocomplete="off">
+    <button class="chat-voice-toggle" id="chat-voice-toggle" title="Toggle spoken replies" aria-label="Toggle voice replies">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M15.5 8.5a5 5 0 010 7"/><path d="M19 5a9 9 0 010 14"/></svg>
+    </button>
+    <button class="chat-send" id="chat-send">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4z"/></svg>
+    </button>
+  </div>
+</div>
+<script src="https://player.vimeo.com/api/player.js"></script>
+<script src="assets/site.js"></script>
+<script src="assets/router.js"></script>
+</body></html>

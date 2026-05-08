@@ -1,0 +1,53 @@
+[build]
+  publish    = "."
+  functions  = "netlify/functions"
+
+[functions]
+  node_bundler = "esbuild"
+
+# Cache assets aggressively, never cache HTML
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+# Friendly URLs (so /services -> /services.html)
+[[redirects]]
+  from   = "/services"
+  to     = "/services.html"
+  status = 200
+[[redirects]]
+  from   = "/demo"
+  to     = "/demo.html"
+  status = 200
+[[redirects]]
+  from   = "/process"
+  to     = "/process.html"
+  status = 200
+[[redirects]]
+  from   = "/results"
+  to     = "/results.html"
+  status = 200
+[[redirects]]
+  from   = "/about"
+  to     = "/about.html"
+  status = 200
+[[redirects]]
+  from   = "/contact"
+  to     = "/contact.html"
+  status = 200
+[[redirects]]
+  from   = "/book"
+  to     = "/book.html"
+  status = 200
+
+# VAPI tool endpoints (short paths)
+[[redirects]]
+  from   = "/vapi/*"
+  to     = "/.netlify/functions/vapi-:splat"
+  status = 200

@@ -1,0 +1,12 @@
+{
+  "name": "theaiguru-biz",
+  "version": "1.0.0",
+  "private": true,
+  "description": "TheAIGuru.biz site + Netlify functions for the GURU VAPI voice agent.",
+  "scripts": {
+    "build":  "python _build_pages.py",
+    "dev":    "netlify dev",
+    "deploy": "netlify deploy --prod"
+  },
+  "engines": { "node": ">=18" }
+}

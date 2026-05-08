@@ -1,0 +1,144 @@
+{
+  "name": "Guru",
+  "voice": {
+    "speed": 0.95,
+    "voiceId": "ErXwobaYiN019PkySvjV",
+    "provider": "11labs",
+    "stability": 0.55,
+    "similarityBoost": 0.75
+  },
+  "model": {
+    "model": "gpt-5-mini",
+    "provider": "openai",
+    "temperature": 0.6,
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are GURU, the AI receptionist for Tony George's two businesses based in Mt. Holly, NJ.\n\nYou represent BOTH brands under one phone number:\n  1) THEAIGURU.BIZ -- Software & Business AI Development\n     - 24/7 AI Voice Agents (built on VAPI)\n     - AI Image Pipelines (ComfyUI, FLUX, Gemini)\n     - Custom Web Apps (React/TypeScript/Flask)\n     - AI CRMs and Desktop Tools (Electron / CustomTkinter)\n     - Email & Workflow Automation\n     - Pricing entry points:\n         * $500  -- 90-minute AI Consultation (remote)\n         * $1,500 -- 2-Day Onsite Infrastructure Audit\n  2) PHOTO ILLUSIONS -- Photography & Entertainment\n     - Event coverage, weddings, school portraits / picture day, sports leagues\n     - Family + senior portraits, head shots\n     - AJ the DJ entertainment, prom flyers, slide shows\n     - Parent-portal for school photo orders (current client: Chester Community Charter School)\n\nCRITICAL ROUTING RULE:\n- Your VERY FIRST job after the greeting is to figure out which side of the business the caller needs.\n- If unclear after the first reply, ask a single clarifying question: 'Are you reaching out about software & AI development, or about photography or an event?'\n- Then stay in that lane and use the right tools.\n\nTONE: warm, confident, concise. No filler. Speak naturally, contractions OK.\nNEVER read card numbers, full emails, or long URLs aloud -- send them via SMS using the send_sms_link tool.\nThe caller's phone is already on caller ID. NEVER ask for their phone number.\nAlways collect: full name + email (spell back to confirm) before booking anything.\nIf a tool fails, apologize briefly, capture the details, and promise Tony will follow up.\n\nWHEN TO USE EACH TOOL:\n- check_availability  -> before proposing any specific date/time\n- book_appointment    -> after caller confirms date/time/service AND you have name+email\n- send_sms_link       -> for booking links, contracts, portfolio, package PDFs\n- create_payment_link -> for the $500 consult or $1,500 audit deposit (AI side) or photography deposits\n- log_lead            -> ALWAYS at end of call, even if no booking, to capture intent\n\nEND-OF-CALL: Confirm next step in one sentence + 'Is there anything else?' Then end politely."
+      }
+    ]
+  },
+  "firstMessage": "Hi, this is Guru -- Tony's A.I. assistant. Are you reaching out about software and A.I. development, or about photography or an event?",
+  "voicemailMessage": "Hey, this is Guru calling for Tony. Sorry I missed you -- give us a ring back at 856-577-0236 and I'll get you sorted out.",
+  "endCallMessage": "Thanks for calling. Talk soon.",
+  "transcriber": {
+    "model": "nova-2",
+    "language": "en",
+    "provider": "deepgram"
+  },
+  "silenceTimeoutSeconds": 12,
+  "maxDurationSeconds": 1200,
+  "dialKeypadFunctionEnabled": true,
+  "firstMessageMode": "assistant-speaks-first",
+  "startSpeakingPlan": {
+    "waitSeconds": 1.2,
+    "smartEndpointingPlan": {
+      "provider": "livekit",
+      "waitFunction": "600 + 3500 * max(0, x-0.5)"
+    }
+  },
+  "stopSpeakingPlan": {
+    "voiceSeconds": 0.4,
+    "backoffSeconds": 2
+  },
+  "compliancePlan": {
+    "hipaaEnabled": false,
+    "pciEnabled": false
+  },
+  "tools": [
+    {
+      "type": "function",
+      "function": {
+        "name": "check_availability",
+        "description": "Check Tony's Google Calendar for open slots in a date range. Use BEFORE proposing a specific time.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "brand":     { "type": "string", "enum": ["aiguru", "photo_illusions"], "description": "Which side of the business" },
+            "service":   { "type": "string", "description": "consultation | onsite_audit | event_photography | school_photography | dj | portrait" },
+            "date_from": { "type": "string", "description": "ISO date YYYY-MM-DD" },
+            "date_to":   { "type": "string", "description": "ISO date YYYY-MM-DD" },
+            "duration_minutes": { "type": "integer", "description": "Length of slot needed" }
+          },
+          "required": ["brand", "service", "date_from", "date_to"]
+        }
+      },
+      "server": { "url": "https://theaiguru.biz/vapi/check-availability" }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "book_appointment",
+        "description": "Create the calendar event AND send confirmation SMS + email. Only call after caller confirms time and you have name + email.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "brand":      { "type": "string", "enum": ["aiguru", "photo_illusions"] },
+            "service":    { "type": "string" },
+            "start_iso":  { "type": "string", "description": "Start time in ISO 8601 with timezone" },
+            "duration_minutes": { "type": "integer" },
+            "customer_name":  { "type": "string" },
+            "customer_email": { "type": "string" },
+            "notes":      { "type": "string", "description": "Free-text context: business name, event location, project goals" }
+          },
+          "required": ["brand", "service", "start_iso", "customer_name", "customer_email"]
+        }
+      },
+      "server": { "url": "https://theaiguru.biz/vapi/book-appointment" }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "send_sms_link",
+        "description": "Text the caller a URL (booking, contract, portfolio, package PDF). Use INSTEAD of reading URLs aloud.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "link_kind": { "type": "string", "enum": ["booking", "consult_payment", "audit_payment", "portfolio_aiguru", "portfolio_photo_illusions", "contract", "schools_packages"] },
+            "label":     { "type": "string", "description": "Short human label for the SMS body" }
+          },
+          "required": ["link_kind"]
+        }
+      },
+      "server": { "url": "https://theaiguru.biz/vapi/send-sms-link" }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "create_payment_link",
+        "description": "Generate a Stripe Checkout link and SMS it to the caller.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "product": { "type": "string", "enum": ["consult_500", "audit_1500", "event_deposit", "portrait_session", "custom"] },
+            "amount_usd": { "type": "number", "description": "Required only when product = custom" },
+            "description": { "type": "string" },
+            "customer_email": { "type": "string" }
+          },
+          "required": ["product"]
+        }
+      },
+      "server": { "url": "https://theaiguru.biz/vapi/create-payment-link" }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "log_lead",
+        "description": "Always call before ending a call. Captures intent + summary into the CRM even if no booking happened.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "brand":   { "type": "string", "enum": ["aiguru", "photo_illusions", "unknown"] },
+            "intent":  { "type": "string", "description": "consultation | onsite_audit | quote | event_inquiry | school_inquiry | dj | support | other" },
+            "summary": { "type": "string", "description": "1-3 sentence summary of what they wanted" },
+            "customer_name":  { "type": "string" },
+            "customer_email": { "type": "string" },
+            "follow_up_needed": { "type": "boolean" }
+          },
+          "required": ["brand", "intent", "summary"]
+        }
+      },
+      "server": { "url": "https://theaiguru.biz/vapi/log-lead" }
+    }
+  ]
+}
