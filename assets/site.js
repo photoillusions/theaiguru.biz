@@ -946,14 +946,12 @@ gsap.utils.toArray('.section-title').forEach(title => {
 })();
 
 /* ═══════════════════════════════════
-   AUDIO ENGINE — SOUND FX + AMBIENT JAZZ
+   AUDIO ENGINE — SOUND FX ONLY
 ═══════════════════════════════════ */
 (function initAudioEngine() {
   let audioCtx = null;
   let masterGain = null;
-  let musicGain = null;
   let sfxGain = null;
-  let musicStarted = false;
   let userInteracted = false;
 
   function getCtx() {
@@ -965,9 +963,6 @@ gsap.utils.toArray('.section-title').forEach(title => {
       sfxGain = audioCtx.createGain();
       sfxGain.gain.value = 0.5;
       sfxGain.connect(masterGain);
-      musicGain = audioCtx.createGain();
-      musicGain.gain.value = 0.0;
-      musicGain.connect(masterGain);
     }
     if (audioCtx.state === 'suspended') audioCtx.resume();
     return audioCtx;
@@ -1089,43 +1084,18 @@ gsap.utils.toArray('.section-title').forEach(title => {
     }, { passive: true });
   }
 
-  /* ═══════════════════════════════════
-     BACKGROUND MUSIC — AUDIO FILE
-  ═══════════════════════════════════ */
-  let bgMusic = null;
-
-  function startAmbientJazz() {
-    if (musicStarted) return;
-    musicStarted = true;
-
-    bgMusic = new Audio('files/Slip%20of%20the%20Tongue.m4a');
-    bgMusic.loop = true;
-    bgMusic.volume = 0.25;
-    bgMusic.play().catch(() => {
-      // If autoplay blocked, retry on next interaction
-      const retry = () => {
-        bgMusic.play();
-        document.removeEventListener('click', retry);
-        document.removeEventListener('keydown', retry);
-      };
-      document.addEventListener('click', retry, { passive: true });
-      document.addEventListener('keydown', retry, { passive: true });
-    });
-  }
-
   /* ── Audio control UI ── */
   function createAudioControls() {
     const panel = document.createElement('div');
     panel.id = 'audio-controls';
     panel.innerHTML = `
-      <button id="audio-toggle" title="Toggle Music & Sound">
+      <button id="audio-toggle" title="Toggle Sound">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M9 18V5l12-2v13"/>
           <circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>
         </svg>
       </button>
       <div id="audio-panel" class="audio-panel-hidden">
-        <label>Music <input type="range" id="music-vol" min="0" max="100" value="25"></label>
         <label>SFX <input type="range" id="sfx-vol" min="0" max="100" value="50"></label>
       </div>
     `;
@@ -1191,16 +1161,11 @@ gsap.utils.toArray('.section-title').forEach(title => {
         userInteracted = true;
         getCtx();
         attachSFX();
-        startAmbientJazz();
       }
       isMuted = !isMuted;
       toggle.classList.toggle('muted', isMuted);
       if (masterGain) {
         masterGain.gain.linearRampToValueAtTime(isMuted ? 0 : 0.6, audioCtx.currentTime + 0.3);
-      }
-      if (bgMusic) {
-        if (isMuted) bgMusic.pause();
-        else bgMusic.play().catch(() => {});
       }
     });
 
@@ -1211,10 +1176,6 @@ gsap.utils.toArray('.section-title').forEach(title => {
       audioPanel.classList.add('audio-panel-hidden');
     });
 
-    document.getElementById('music-vol').addEventListener('input', e => {
-      if (bgMusic) bgMusic.volume = e.target.value / 100;
-      if (musicGain) musicGain.gain.linearRampToValueAtTime(e.target.value / 100 * 0.5, audioCtx.currentTime + 0.1);
-    });
     document.getElementById('sfx-vol').addEventListener('input', e => {
       if (sfxGain) sfxGain.gain.linearRampToValueAtTime(e.target.value / 100 * 0.7, audioCtx.currentTime + 0.1);
     });
@@ -1226,7 +1187,6 @@ gsap.utils.toArray('.section-title').forEach(title => {
     userInteracted = true;
     getCtx();
     attachSFX();
-    startAmbientJazz();
     document.removeEventListener('click', onFirstInteraction);
     document.removeEventListener('scroll', onFirstInteraction);
     document.removeEventListener('keydown', onFirstInteraction);
@@ -1237,12 +1197,7 @@ gsap.utils.toArray('.section-title').forEach(title => {
   // Wait for DOM then set up
   createAudioControls();
 
-  // Try to auto-start music immediately (browsers may block)
-  getCtx();
-  attachSFX();
-  startAmbientJazz();
-
-  // Fallback: if autoplay was blocked, start on first interaction
+  // SFX engine activates on first user interaction (browsers require gesture)
   document.addEventListener('click', onFirstInteraction, { passive: true });
   document.addEventListener('scroll', onFirstInteraction, { passive: true });
   document.addEventListener('keydown', onFirstInteraction, { passive: true });
