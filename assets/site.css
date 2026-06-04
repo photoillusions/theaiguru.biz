@@ -995,6 +995,28 @@ section { padding: 7rem 2rem; position: relative; }
   text-transform: uppercase;
   color: var(--text-muted);
 }
+.video-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.5rem;
+  max-width: 1200px;
+  margin: 2.5rem auto 0;
+}
+.video-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+.video-card .video-container {
+  max-width: 100%;
+  border-radius: 20px;
+}
+@media (max-width: 900px) {
+  .video-grid {
+    grid-template-columns: 1fr;
+    margin-top: 2rem;
+  }
+}
 
 /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    PROCESS TIMELINE
