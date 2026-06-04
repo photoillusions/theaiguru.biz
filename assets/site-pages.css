@@ -68,6 +68,20 @@ footer { padding: 1rem 2rem !important; border-top-width: 2px !important; }
   to   { transform: translateX(-50%); }
 }
 
+@media (max-width: 768px) {
+  .trusted-label { font-size: 10px; letter-spacing: 2px; margin-bottom: 18px; }
+  .trusted-track { gap: 40px; }
+  .trusted-track span { font-size: 18px; letter-spacing: 1px; }
+}
+
+@media (max-width: 600px) {
+  .trusted-by { padding: 40px 0 20px; }
+  .trusted-inner { padding: 0 16px; }
+  .trusted-label { font-size: 9px; margin-bottom: 14px; }
+  .trusted-track { gap: 30px; animation: trusted-scroll 25s linear infinite; }
+  .trusted-track span { font-size: 14px; opacity: 0.6; }
+}
+
 /* ---------- portfolio grid (demo page) ---------- */
 .portfolio-section { padding: 20px 0 60px; }
 .portfolio-section .section-header-center { margin-bottom: 0; }
@@ -117,6 +131,20 @@ main.page > .video-section { padding-bottom: 2.5rem !important; }
   line-height: 1.6;
   color: var(--text-muted);
   margin-bottom: 18px;
+}
+
+@media (max-width: 768px) {
+  .portfolio-grid { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 18px; }
+  .portfolio-card { padding: 24px 20px 22px; }
+  .portfolio-card h3 { font-size: 16px; }
+  .portfolio-card p { font-size: 13.5px; }
+}
+
+@media (max-width: 600px) {
+  .portfolio-grid { grid-template-columns: 1fr; gap: 16px; margin-top: 40px; }
+  .portfolio-card { padding: 20px 16px; }
+  .portfolio-card h3 { font-size: 15px; margin-bottom: 8px; }
+  .portfolio-card p { font-size: 13px; margin-bottom: 12px; }
 }
 
 /* ---------- about page ---------- */
@@ -183,6 +211,12 @@ main.page > .video-section { padding-bottom: 2.5rem !important; }
 @media (max-width: 880px) {
   .about-grid { grid-template-columns: 1fr; gap: 36px; }
   .about-stack-card { position: static; }
+}
+
+@media (max-width: 600px) {
+  .about-grid { gap: 20px; }
+  .about-text h2 { font-size: 20px; }
+  .about-text p { font-size: 15px; line-height: 1.6; }
 }
 
 /* ---------- book / consultation page ---------- */
@@ -287,6 +321,18 @@ main.page > .video-section { padding-bottom: 2.5rem !important; }
 @media (max-width: 880px) {
   .book-grid { grid-template-columns: 1fr; }
   .book-form .form-row { grid-template-columns: 1fr; gap: 0; }
+}
+
+@media (max-width: 600px) {
+  .book-section { padding: 40px 0 80px; }
+  .book-form { padding: 24px 18px; }
+  .book-form input,
+  .book-form select,
+  .book-form textarea { font-size: 16px; min-height: 44px; }
+  .book-form label { font-size: 11px; margin-bottom: 14px; }
+  .book-form .btn-cta-primary { min-height: 48px; }
+  .book-side { gap: 16px; }
+  .book-side-card { padding: 20px 18px; }
 }
 
 /* ---------- contact extras (cards under CTA) ---------- */
@@ -576,7 +622,15 @@ body { perspective: 1400px; }
 .intake-hint { font-size: 0.78rem; color: rgba(245,232,208,0.55); margin: -0.4rem 0 0.6rem; }
 
 .intake-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; margin-bottom: 0.9rem; }
-@media (max-width: 560px) { .intake-row { grid-template-columns: 1fr; } }
+@media (max-width: 560px) { 
+  .intake-row { grid-template-columns: 1fr; } 
+  .intake-overlay { padding: 1rem; }
+  .intake-modal { border-radius: 16px; padding: 20px; }
+  .intake-modal input,
+  .intake-modal select,
+  .intake-modal textarea { min-height: 44px; font-size: 16px; }
+  .intake-modal button { min-height: 48px; }
+}
 
 .intake-field { display: block; margin-bottom: 0.9rem; }
 .intake-field span {

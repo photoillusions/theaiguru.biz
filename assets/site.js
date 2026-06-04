@@ -7,6 +7,12 @@ window.addEventListener('load', () => {
   }, 1200);
 });
 
+/* ═════════════════════════════════════════════════════════════════
+   MOBILE DETECTION
+═════════════════════════════════════════════════════════════════ */
+const isMobile = window.innerWidth < 768 || window.matchMedia('(hover: none)').matches;
+const isTablet = window.innerWidth < 1024;
+
 /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    CUSTOM CURSOR
 â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
@@ -82,9 +88,10 @@ function drawParticles() {
   requestAnimationFrame(drawParticles);
 }
 resizeParticles();
-initParticles(40);
+const particleCount = isMobile ? 15 : (isTablet ? 25 : 40);
+initParticles(particleCount);
 drawParticles();
-window.addEventListener('resize', () => { resizeParticles(); initParticles(40); });
+window.addEventListener('resize', () => { resizeParticles(); initParticles(particleCount); });
 
 /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    THREE.JS â€” 3D HERO BACKGROUND
@@ -96,13 +103,13 @@ window.addEventListener('resize', () => { resizeParticles(); initParticles(40); 
   const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
   camera.position.z = 30;
 
-  const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+  const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: !isMobile });
   renderer.setSize(window.innerWidth, window.innerHeight);
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setPixelRatio(isMobile ? 1 : Math.min(window.devicePixelRatio, 2));
   container.appendChild(renderer.domElement);
 
   /* Particle sphere â€” neural network style */
-  const nodeCount = 200;
+  const nodeCount = isMobile ? 80 : (isTablet ? 120 : 200);
   const positions = new Float32Array(nodeCount * 3);
   const colors = new Float32Array(nodeCount * 3);
   const cyanColor = new THREE.Color(0x00d4ff);
@@ -239,6 +246,61 @@ const nav = document.querySelector('nav');
 window.addEventListener('scroll', () => {
   nav.classList.toggle('scrolled', window.scrollY > 50);
 });
+
+/* ═════════════════════════════════════════════════════════════════
+   MOBILE MENU FUNCTIONALITY
+═════════════════════════════════════════════════════════════════ */
+(function initMobileMenu() {
+  const mobileToggle = document.querySelector('.mobile-toggle');
+  const navLinks = document.querySelector('.nav-links');
+  let mobileMenu = document.querySelector('.nav-menu-mobile');
+
+  // Create mobile menu if it doesn't exist
+  if (!mobileMenu) {
+    mobileMenu = document.createElement('div');
+    mobileMenu.className = 'nav-menu-mobile';
+    
+    // Copy nav links to mobile menu
+    const links = navLinks ? navLinks.querySelectorAll('a') : [];
+    links.forEach(link => {
+      const clone = link.cloneNode(true);
+      mobileMenu.appendChild(clone);
+    });
+
+    // Add CTA button to mobile menu
+    const ctaBtn = document.querySelector('.btn-nav');
+    if (ctaBtn) {
+      const cta = ctaBtn.cloneNode(true);
+      mobileMenu.appendChild(cta);
+    }
+
+    nav.appendChild(mobileMenu);
+  }
+
+  // Toggle menu
+  if (mobileToggle) {
+    mobileToggle.addEventListener('click', () => {
+      mobileToggle.classList.toggle('active');
+      mobileMenu.classList.toggle('active');
+    });
+  }
+
+  // Close menu when link is clicked
+  mobileMenu.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      mobileToggle.classList.remove('active');
+      mobileMenu.classList.remove('active');
+    });
+  });
+
+  // Close menu on resize if moving to desktop
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > 900) {
+      mobileToggle.classList.remove('active');
+      mobileMenu.classList.remove('active');
+    }
+  });
+})();
 
 /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    GSAP SCROLL ANIMATIONS
