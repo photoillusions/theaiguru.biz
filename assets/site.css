@@ -1027,6 +1027,7 @@ section { padding: 7rem 2rem; position: relative; }
   background: rgba(255,255,255,0.92);
   border: 1px solid rgba(139,21,48,0.12);
   transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  padding: 1rem 1rem 1.25rem;
 }
 .video-card:hover {
   transform: translateY(-4px);
@@ -1037,6 +1038,13 @@ section { padding: 7rem 2rem; position: relative; }
 .video-card .video-placeholder {
   max-width: 100%;
   border-radius: 20px;
+}
+.video-description {
+  padding: 0 0 0.75rem;
+  margin: 0;
+  color: var(--text-muted);
+  line-height: 1.7;
+  font-size: 0.95rem;
 }
 .video-placeholder {
   padding: 1.2rem 1rem;
